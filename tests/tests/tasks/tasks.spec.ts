@@ -22,6 +22,41 @@ test.describe('tasks', () => {
     await expect(page.getByRole('button', { name: 'Create' })).toBeVisible()
   })
 
+  test('wf.create_task_dialog: fill the form and submit -> confirmation toast echoes the values', async ({
+    page,
+  }) => {
+    await page.goto('/tasks')
+
+    const title = `Argus e2e task ${Date.now()}`
+
+    // tasks.list / create_button
+    await page.getByRole('button', { name: 'Create' }).click()
+
+    // tasks.create_dialog / title_input, status_combobox, label_radiogroup, priority_radiogroup
+    const dialog = page.getByRole('dialog', { name: 'Create Task' })
+    await dialog.getByRole('textbox', { name: 'Title' }).fill(title)
+    await dialog.getByRole('combobox', { name: 'Status' }).click()
+    await page.getByRole('option', { name: 'In Progress' }).click()
+    await dialog.getByRole('radio', { name: 'Feature' }).click()
+    await dialog.getByRole('radio', { name: 'High' }).click()
+
+    // tasks.create_dialog / save_button
+    await dialog.getByRole('button', { name: 'Save changes' }).click()
+
+    // This build has no real backend: submitting only echoes the payload in a toast
+    // (region "Notifications") and does not add a row to the table. Assert exactly that,
+    // rather than a persisted row, so the test doesn't silently start failing once/if a
+    // real create-task API is wired up (at which point it should be rewritten to assert
+    // the new row instead).
+    await expect(dialog).toBeHidden()
+    const toast = page.getByText('You submitted the following values:')
+    await expect(toast).toBeVisible()
+    const toastPayload = page.locator('code', { hasText: title })
+    await expect(toastPayload).toContainText('"status": "in progress"')
+    await expect(toastPayload).toContainText('"label": "feature"')
+    await expect(toastPayload).toContainText('"priority": "high"')
+  })
+
   test('wf.task_row_actions: Tasks list -> open a row kebab menu -> Edit/Delete actions', async ({
     page,
   }) => {

@@ -33,18 +33,25 @@ nothing currently requires them). See `docs/argus/conventions.md` for the full p
 |---|---|
 | `tests/dashboard/dashboard.spec.ts` | `wf.dashboard_analytics` |
 | `tests/shell/shell.spec.ts` | `wf.command_palette_navigate`, `wf.customize_theme` |
-| `tests/tasks/tasks.spec.ts` | `wf.create_task_dialog`, `wf.task_row_actions` |
-| `tests/users/users.spec.ts` | `wf.invite_user` |
+| `tests/tasks/tasks.spec.ts` | `wf.create_task_dialog` (cancel + full submit), `wf.task_row_actions` |
+| `tests/users/users.spec.ts` | `wf.invite_user` (cancel + full submit) |
 | `tests/chats/chats.spec.ts` | `wf.start_chat` |
 | `tests/auth/auth.spec.ts` | `wf.auth_navigation_loop` |
 | `tests/errors/errors.spec.ts` | `wf.error_page_recovery` |
 
 ## Caveats
 
-- **No destructive actions are exercised.** Every dialog test closes/cancels rather than
-  submitting (Save/Invite/Create), because the model does not yet know what those submissions do
-  (`gap.settings_form_submit_effects`, `gap.auth_backend_behavior`, and friends in
-  `docs/argus/gaps.yaml`) — structure/reachability is verified instead of a full happy-path submit.
+- **`wf.create_task_dialog` and `wf.invite_user` each have two tests: a cancel path and a full
+  submit path.** Probed live before writing the submit assertions: this build has **no real
+  backend** for either form — clicking Save/Invite only shows a toast ("You submitted the
+  following values:") echoing the payload as JSON; the table gains no row and the page count
+  doesn't change. The tests assert exactly that (toast + payload), not a persisted row. If a real
+  create/invite API ever gets wired up, these are the first two tests to rewrite (assert the new
+  row instead of the toast).
+- **Every other dialog test still only closes/cancels rather than submitting** (Settings'
+  Update-*, the auth forms, Users' Add User) — the model doesn't yet know what those specific
+  submissions do (`gap.settings_form_submit_effects`, `gap.auth_backend_behavior`, and friends in
+  `docs/argus/gaps.yaml`), and they weren't in this pass's scope to probe.
 - **`chats.spec.ts` targets the conversation named "Alex John"** — the mock chat list looks
   hand-authored (not `faker`-randomized like tasks/users), so this should be stable across dev
   server restarts, but if the mock data source ever changes this is the first thing to update.
