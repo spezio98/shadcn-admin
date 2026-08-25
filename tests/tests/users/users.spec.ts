@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('users', () => {
+test.describe('users', { tag: '@users' }, () => {
   test('wf.invite_user: Users list -> Invite User dialog -> cancel -> back to list', async ({
     page,
   }) => {

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('shell', () => {
+test.describe('shell', { tag: '@shell' }, () => {
   test('wf.command_palette_navigate: header search -> type "task" -> Enter navigates to Tasks', async ({
     page,
   }) => {

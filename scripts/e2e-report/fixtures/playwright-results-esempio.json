@@ -1,0 +1,330 @@
+{
+  "config": { "rootDir": "/home/runner/work/webshop/webshop" },
+  "stats": {
+    "startTime": "2026-08-25T12:32:00.000Z",
+    "duration": 372000,
+    "expected": 5,
+    "unexpected": 3,
+    "flaky": 1,
+    "skipped": 1
+  },
+  "errors": [],
+  "suites": [
+    {
+      "title": "tests/monitoraggio/stato.spec.ts",
+      "file": "tests/monitoraggio/stato.spec.ts",
+      "specs": [
+        {
+          "title": "La pagina di stato del servizio e raggiungibile",
+          "ok": false,
+          "tags": [],
+          "file": "tests/monitoraggio/stato.spec.ts",
+          "line": 8,
+          "column": 5,
+          "tests": [
+            {
+              "projectName": "chromium",
+              "annotations": [],
+              "status": "unexpected",
+              "results": [
+                {
+                  "status": "failed",
+                  "duration": 340,
+                  "retry": 0,
+                  "steps": [],
+                  "attachments": [],
+                  "error": {
+                    "message": "Error: Cannot find module '../helpers/stato-client' imported from tests/monitoraggio/stato.spec.ts",
+                    "location": { "file": "tests/monitoraggio/stato.spec.ts", "line": 3, "column": 1 }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/onboarding/invito.spec.ts",
+      "file": "tests/onboarding/invito.spec.ts",
+      "specs": [
+        {
+          "title": "Il cliente invita un collega nel proprio spazio di lavoro",
+          "ok": false,
+          "tags": ["@onboarding"],
+          "file": "tests/onboarding/invito.spec.ts",
+          "line": 14,
+          "column": 5,
+          "tests": [
+            {
+              "projectName": "chromium",
+              "annotations": [],
+              "status": "unexpected",
+              "results": [
+                {
+                  "status": "failed",
+                  "duration": 400,
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Before Hooks",
+                      "category": "hook",
+                      "duration": 380,
+                      "error": { "message": "Error: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces" }
+                    }
+                  ],
+                  "attachments": [],
+                  "error": {
+                    "message": "Error: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces",
+                    "location": { "file": "tests/onboarding/fixtures.ts", "line": 22, "column": 9 }
+                  }
+                },
+                {
+                  "status": "failed",
+                  "duration": 12400,
+                  "retry": 1,
+                  "steps": [
+                    {
+                      "title": "beforeEach hook",
+                      "category": "hook",
+                      "duration": 12400,
+                      "error": { "message": "Error: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces" }
+                    }
+                  ],
+                  "attachments": [
+                    { "name": "video", "contentType": "video/webm", "path": "test-results/onboarding-invito-chromium-retry1/video.webm" },
+                    { "name": "trace", "contentType": "application/zip", "path": "test-results/onboarding-invito-chromium-retry1/trace.zip" }
+                  ],
+                  "error": {
+                    "message": "\u001b[31mError\u001b[39m: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces",
+                    "location": { "file": "tests/onboarding/fixtures.ts", "line": 22, "column": 9 }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/onboarding/registrazione.spec.ts",
+      "file": "tests/onboarding/registrazione.spec.ts",
+      "specs": [
+        {
+          "title": "Il nuovo cliente completa la registrazione con email aziendale",
+          "ok": false,
+          "tags": ["@onboarding"],
+          "file": "tests/onboarding/registrazione.spec.ts",
+          "line": 22,
+          "column": 5,
+          "tests": [
+            {
+              "projectName": "chromium",
+              "annotations": [],
+              "status": "unexpected",
+              "results": [
+                { "status": "failed", "duration": 31240, "retry": 0, "steps": [], "attachments": [], "error": { "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.", "location": { "file": "tests/onboarding/registrazione.spec.ts", "line": 47, "column": 20 } } },
+                {
+                  "status": "failed",
+                  "duration": 31240,
+                  "retry": 1,
+                  "steps": [
+                    { "title": "Before Hooks", "category": "hook", "duration": 900 },
+                    { "title": "Apertura della pagina di registrazione", "category": "test.step", "duration": 1200 },
+                    { "title": "Inserimento dei dati anagrafici", "category": "test.step", "duration": 2400 },
+                    { "title": "Inserimento email aziendale", "category": "test.step", "duration": 800 },
+                    { "title": "Invio del modulo", "category": "test.step", "duration": 1500 },
+                    {
+                      "title": "Conferma del codice via email",
+                      "category": "test.step",
+                      "duration": 30000,
+                      "error": { "message": "TimeoutError: locator.click: Timeout 30000ms exceeded." },
+                      "steps": [
+                        { "title": "click", "category": "pw:api", "duration": 30000, "error": { "message": "TimeoutError" } }
+                      ]
+                    }
+                  ],
+                  "attachments": [
+                    { "name": "screenshot", "contentType": "image/png", "path": "test-results/onboarding-registrazione-chromium-retry1/test-failed-1.png" },
+                    { "name": "video", "contentType": "video/webm", "path": "test-results/onboarding-registrazione-chromium-retry1/video.webm" },
+                    { "name": "trace", "contentType": "application/zip", "path": "test-results/onboarding-registrazione-chromium-retry1/trace.zip" }
+                  ],
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Conferma codice' })",
+                    "location": { "file": "tests/onboarding/registrazione.spec.ts", "line": 47, "column": 20 }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/onboarding/profilo.spec.ts",
+      "file": "tests/onboarding/profilo.spec.ts",
+      "specs": [
+        {
+          "title": "Il cliente aggiorna i dati di fatturazione dal profilo",
+          "ok": true,
+          "tags": ["@onboarding"],
+          "file": "tests/onboarding/profilo.spec.ts",
+          "line": 9,
+          "column": 5,
+          "tests": [
+            { "projectName": "chromium", "annotations": [], "status": "expected", "results": [ { "status": "passed", "duration": 22900, "retry": 0, "steps": [], "attachments": [] } ] }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/checkout/acquisto.spec.ts",
+      "file": "tests/checkout/acquisto.spec.ts",
+      "specs": [
+        {
+          "title": "Il cliente completa un acquisto con carta di credito",
+          "ok": true,
+          "tags": ["@checkout"],
+          "file": "tests/checkout/acquisto.spec.ts",
+          "line": 30,
+          "column": 5,
+          "tests": [
+            {
+              "projectName": "chromium",
+              "annotations": [],
+              "status": "flaky",
+              "results": [
+                {
+                  "status": "failed",
+                  "duration": 19000,
+                  "retry": 0,
+                  "steps": [
+                    { "title": "Apertura della scheda prodotto", "category": "test.step", "duration": 1800 },
+                    { "title": "Aggiunta al carrello", "category": "test.step", "duration": 1100 },
+                    { "title": "Apertura del riepilogo ordine", "category": "test.step", "duration": 900 },
+                    {
+                      "title": "Inserimento dati carta",
+                      "category": "test.step",
+                      "duration": 15200,
+                      "error": { "message": "Error: locator.fill: Element is not attached to the DOM\nCall log:\n  - waiting for getByLabel('CVV')" }
+                    }
+                  ],
+                  "attachments": [
+                    { "name": "screenshot", "contentType": "image/png", "path": "test-results/checkout-acquisto-chromium/test-failed-1.png" },
+                    { "name": "video", "contentType": "video/webm", "path": "test-results/checkout-acquisto-chromium/video.webm" },
+                    { "name": "trace", "contentType": "application/zip", "path": "test-results/checkout-acquisto-chromium/trace.zip" }
+                  ],
+                  "error": {
+                    "message": "Error: locator.fill: Element is not attached to the DOM\nCall log:\n  - waiting for getByLabel('CVV')",
+                    "location": { "file": "tests/checkout/acquisto.spec.ts", "line": 88, "column": 30 }
+                  }
+                },
+                { "status": "passed", "duration": 39200, "retry": 1, "steps": [], "attachments": [] }
+              ]
+            }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/checkout/carrello.spec.ts",
+      "file": "tests/checkout/carrello.spec.ts",
+      "specs": [
+        {
+          "title": "Il cliente puo svuotare il carrello prima di pagare",
+          "ok": true,
+          "tags": ["@checkout"],
+          "file": "tests/checkout/carrello.spec.ts",
+          "line": 11,
+          "column": 5,
+          "tests": [
+            { "projectName": "chromium", "annotations": [], "status": "expected", "results": [ { "status": "passed", "duration": 18400, "retry": 0, "steps": [], "attachments": [] } ] }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/checkout/conferma.spec.ts",
+      "file": "tests/checkout/conferma.spec.ts",
+      "specs": [
+        {
+          "title": "Il cliente riceve l'email di conferma ordine",
+          "ok": true,
+          "tags": ["@checkout"],
+          "file": "tests/checkout/conferma.spec.ts",
+          "line": 7,
+          "column": 5,
+          "tests": [
+            { "projectName": "chromium", "annotations": [], "status": "expected", "results": [ { "status": "passed", "duration": 26700, "retry": 0, "steps": [], "attachments": [] } ] }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/fatturazione/emissione.spec.ts",
+      "file": "tests/fatturazione/emissione.spec.ts",
+      "specs": [
+        {
+          "title": "La fattura viene generata in PDF dopo il pagamento",
+          "ok": true,
+          "tags": ["@fatturazione"],
+          "file": "tests/fatturazione/emissione.spec.ts",
+          "line": 12,
+          "column": 5,
+          "tests": [
+            { "projectName": "chromium", "annotations": [], "status": "expected", "results": [ { "status": "passed", "duration": 51900, "retry": 0, "steps": [], "attachments": [] } ] }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/fatturazione/nota-credito.spec.ts",
+      "file": "tests/fatturazione/nota-credito.spec.ts",
+      "specs": [
+        {
+          "title": "Una nota di credito annulla la fattura collegata",
+          "ok": true,
+          "tags": ["@fatturazione"],
+          "file": "tests/fatturazione/nota-credito.spec.ts",
+          "line": 18,
+          "column": 5,
+          "tests": [
+            { "projectName": "chromium", "annotations": [], "status": "expected", "results": [ { "status": "passed", "duration": 44300, "retry": 0, "steps": [], "attachments": [] } ] }
+          ]
+        }
+      ],
+      "suites": []
+    },
+    {
+      "title": "tests/fatturazione/registro.spec.ts",
+      "file": "tests/fatturazione/registro.spec.ts",
+      "specs": [
+        {
+          "title": "L'amministratore puo scaricare il registro delle fatture del mese",
+          "ok": true,
+          "tags": ["@fatturazione"],
+          "file": "tests/fatturazione/registro.spec.ts",
+          "line": 25,
+          "column": 5,
+          "tests": [
+            {
+              "projectName": "chromium",
+              "annotations": [{ "type": "skip", "description": "Disponibile solo dal terzo giorno del mese" }],
+              "status": "skipped",
+              "results": [ { "status": "skipped", "duration": 0, "retry": 0, "steps": [], "attachments": [] } ]
+            }
+          ]
+        }
+      ],
+      "suites": []
+    }
+  ]
+}

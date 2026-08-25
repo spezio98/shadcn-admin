@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "id": "17234880001",
+    "attempt": 1,
+    "url": "https://github.com/acme/webshop/actions/runs/17234880001",
+    "status": "completed",
+    "environment": {
+      "id": "staging",
+      "label": "Staging",
+      "isProduction": false
+    },
+    "suiteLabel": "Tutti i test",
+    "triggeredBy": "m.bianchi",
+    "startedAt": "2026-08-24T06:00:00.000Z",
+    "finishedAt": "2026-08-24T06:03:41.000Z",
+    "durationMs": 221000,
+    "timezone": "Europe/Rome",
+    "commit": {
+      "sha": "9f1c4b7e2a8d5306fbc1e94a77d20e5583aa1c46",
+      "shortSha": "9f1c4b7",
+      "branch": "main",
+      "message": "Aggiorna testi della pagina di conferma ordine"
+    }
+  },
+  "stats": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "passRate": 100,
+    "durationMs": 221000
+  },
+  "areas": [
+    {
+      "id": "checkout",
+      "label": "Checkout",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fatturazione",
+      "label": "Fatturazione",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "status": "ok"
+    },
+    {
+      "id": "onboarding",
+      "label": "Onboarding",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "status": "ok"
+    }
+  ],
+  "tests": [
+    {
+      "id": "1a2b3c4d",
+      "title": "Il cliente completa un acquisto con carta di credito",
+      "file": "tests/checkout/acquisto.spec.ts",
+      "area": "checkout",
+      "status": "passed",
+      "durationMs": 42100,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "2b3c4d5e",
+      "title": "Il cliente puo svuotare il carrello prima di pagare",
+      "file": "tests/checkout/carrello.spec.ts",
+      "area": "checkout",
+      "status": "passed",
+      "durationMs": 18400,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "4d5e6f70",
+      "title": "L'amministratore puo scaricare il registro delle fatture del mese",
+      "file": "tests/fatturazione/registro.spec.ts",
+      "area": "fatturazione",
+      "status": "passed",
+      "durationMs": 29800,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "3c4d5e6f",
+      "title": "La fattura viene generata in PDF dopo il pagamento",
+      "file": "tests/fatturazione/emissione.spec.ts",
+      "area": "fatturazione",
+      "status": "passed",
+      "durationMs": 51900,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "6f708192",
+      "title": "Il cliente invita un collega nel proprio spazio di lavoro",
+      "file": "tests/onboarding/invito.spec.ts",
+      "area": "onboarding",
+      "status": "passed",
+      "durationMs": 31500,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "5e6f7081",
+      "title": "Il nuovo cliente completa la registrazione con email aziendale",
+      "file": "tests/onboarding/registrazione.spec.ts",
+      "area": "onboarding",
+      "status": "passed",
+      "durationMs": 47300,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    }
+  ]
+}

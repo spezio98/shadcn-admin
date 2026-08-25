@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('auth', () => {
+test.describe('auth', { tag: '@auth' }, () => {
   test('wf.auth_navigation_loop: Sign in -> Forgot Password -> Sign Up -> Sign in', async ({
     page,
   }) => {

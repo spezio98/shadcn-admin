@@ -3,12 +3,18 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
-  reporter: 'html',
+  retries: process.env.CI ? 2 : 1,
+  reporter: [
+    ['list'],
+    ['json', { outputFile: 'results.json' }],
+    ['./scripts/e2e-report/steps-reporter.mjs', { outputFile: 'steps.json' }],
+    ['html', { open: 'never' }],
+  ],
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:5173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: { mode: 'retain-on-failure', size: { width: 1280, height: 720 } },
   },
   projects: [
     {

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('chats', () => {
+test.describe('chats', { tag: '@chats' }, () => {
   test('wf.start_chat: Inbox -> open a conversation -> message history and compose box', async ({
     page,
   }) => {

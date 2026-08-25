@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('tasks', () => {
+test.describe('tasks', { tag: '@tasks' }, () => {
   test('wf.create_task_dialog: Tasks list -> Create dialog -> close without saving -> back to list', async ({
     page,
   }) => {

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('errors', () => {
+test.describe('errors', { tag: '@errors' }, () => {
   test('wf.error_page_recovery: 401 error page -> Back to Home -> dashboard', async ({ page }) => {
     await page.goto('/errors/unauthorized')
 

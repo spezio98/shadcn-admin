@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('dashboard', () => {
+test.describe('dashboard', { tag: '@dashboard' }, () => {
   test('wf.dashboard_analytics: Overview tab -> Analytics tab shows traffic chart', async ({
     page,
   }) => {
