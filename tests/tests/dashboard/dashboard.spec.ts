@@ -24,4 +24,19 @@ test.describe('dashboard', () => {
     await expect(page.getByRole('tab', { name: 'Reports' })).toBeDisabled()
     await expect(page.getByRole('tab', { name: 'Notifications' })).toBeDisabled()
   })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
+  // Real heading is "Dashboard"; this typo produces a clean expected/actual text diff.
+  test('report-demo: assertion mismatch on the dashboard heading text', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByRole('heading', { name: 'Dashboard' })).toHaveText('Dashboarrrd')
+  })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
+  // tab_reports is disabled in this build; clicking without { force: true } times out with
+  // "element is not enabled", a different failure shape than a missing locator.
+  test('report-demo: actionability timeout clicking a disabled tab', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('tab', { name: 'Reports' }).click()
+  })
 })

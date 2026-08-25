@@ -70,4 +70,30 @@ test.describe('tasks', () => {
     await expect(menu.getByRole('menuitem', { name: 'Edit' })).toBeVisible()
     await expect(menu.getByRole('menuitem', { name: 'Delete' })).toBeVisible()
   })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
+  // No button is ever named this — produces "locator resolved to 0 elements" plus a
+  // screenshot of the real page, a different failure shape than a wrong assertion.
+  test('report-demo: locator not found for a button name that does not exist', async ({
+    page,
+  }) => {
+    await page.goto('/tasks')
+    await page.getByRole('button', { name: 'Create Task Now Please' }).click()
+  })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
+  // Closing the Create Task dialog stays on /tasks; asserting /users produces a clean
+  // toHaveURL diff (expected pattern vs. the real URL).
+  test('report-demo: wrong URL asserted after closing the create-task dialog', async ({
+    page,
+  }) => {
+    await page.goto('/tasks')
+    await page.getByRole('button', { name: 'Create' }).click()
+    await page
+      .getByRole('dialog', { name: 'Create Task' })
+      .getByRole('button', { name: 'Close' })
+      .first()
+      .click()
+    await expect(page).toHaveURL(/\/users$/)
+  })
 })

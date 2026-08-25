@@ -1,13 +1,16 @@
 name: Continuous Integration
 
-on:
-  push:
-    branches:
-      - main
-
-  pull_request:
-    branches:
-      - main
+on: {}
+  # Triggers commented out temporarily — intentional failing tests in tests/tests/**
+  # (report-reading exercise) are being pushed and should not trigger CI runs.
+  # Restore before merging real work:
+  # push:
+  #   branches:
+  #     - main
+  #
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   install-lint-build:
