@@ -1,28 +1,34 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('dashboard', { tag: '@dashboard' }, () => {
-  test('wf.dashboard_analytics: Overview tab -> Analytics tab shows traffic chart', async ({
+  test("wf.dashboard_analytics: L'utente passa dalla Panoramica alla scheda Analisi e vede il grafico del traffico", async ({
     page,
   }) => {
     await page.goto('/')
 
-    // dashboard.overview / tab_overview
-    await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
+    await test.step('Verifica che la scheda Panoramica sia disponibile', async () => {
+      // dashboard.overview / tab_overview
+      await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
+    })
 
-    // dashboard.overview / tab_analytics
-    await page.getByRole('tab', { name: 'Analytics' }).click()
+    await test.step('Apertura della scheda Analisi e verifica del grafico del traffico', async () => {
+      // dashboard.overview / tab_analytics
+      await page.getByRole('tab', { name: 'Analytics' }).click()
 
-    // dashboard.analytics / traffic_chart
-    await expect(page.getByText('Traffic Overview')).toBeVisible()
+      // dashboard.analytics / traffic_chart
+      await expect(page.getByText('Traffic Overview')).toBeVisible()
+    })
   })
 
-  test('dashboard.overview: Reports and Notifications tabs are disabled (known_issues)', async ({
+  test('Le schede Report e Notifiche risultano disabilitate (problema noto)', async ({
     page,
   }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('tab', { name: 'Reports' })).toBeDisabled()
-    await expect(page.getByRole('tab', { name: 'Notifications' })).toBeDisabled()
+    await test.step('Verifica che le schede Report e Notifiche siano disabilitate', async () => {
+      await expect(page.getByRole('tab', { name: 'Reports' })).toBeDisabled()
+      await expect(page.getByRole('tab', { name: 'Notifications' })).toBeDisabled()
+    })
   })
 
   // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
