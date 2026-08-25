@@ -32,3 +32,15 @@ dist-ssr
 # Vitest artifacts (browser screenshots/attachments)
 **/__screenshots__/
 .vitest-attachments/
+
+# playwright-cli driver artifacts (argus explore-ui)
+.playwright-cli/
+.playwright/
+
+# Playwright test runner artifacts (tests/)
+/playwright-report/
+/test-results/
+
+# local tool state (Claude Code skills, tokensave code-graph cache)
+/.claude/
+/.tokensave/

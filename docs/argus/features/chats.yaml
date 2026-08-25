@@ -1,0 +1,85 @@
+feature: chats
+summary: "Inbox: conversation list, thread view with message history, new-message dialog"
+
+screens:
+  - id: chats.inbox_empty
+    name: "Chats — no conversation selected"
+    description: "Default state on navigating to /chats: conversation list on the left, empty 'Your messages' placeholder on the right."
+    route: "/chats"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: conversation_search
+        role: "filters the conversation list"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Search' })", type: role }
+        stability: anchor
+      - id: new_chat_button
+        role: "unlabeled header icon button; opens the New message dialog"
+        locators:
+          web: { pattern: "button", type: role }
+        stability: fragile
+        quirks: "no accessible name; is the sole button next to the 'Inbox' heading"
+      - id: conversation_item
+        role: "one row per conversation: avatar, name, last-message preview"
+        locators:
+          web: { pattern: "getByRole('button', { name: /.+/ }).first()", type: role }
+        stability: stable
+        disambiguation: { index: 0 }
+      - id: send_message_cta
+        role: "'Send message' button in the empty-state panel; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Send message' })", type: role }
+        stability: stable
+
+  - id: chats.thread
+    name: "Chats — open conversation"
+    description: "Selected conversation's message history (grouped by date) plus a text box and send button."
+    route: "/chats"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues:
+      - id: ki.thread_header_icons_unnamed
+        summary: "the 3 header icon buttons (call/video/info, by position) carry no accessible name"
+    elements:
+      - id: message_textbox
+        role: "compose a new message"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Chat Text Box' })", type: role }
+        stability: anchor
+      - id: send_button
+        role: "unlabeled send button next to the compose box; not exercised"
+        locators:
+          web: { pattern: "button", type: role }
+        stability: fragile
+        quirks: "no accessible name; is the last button in the compose row"
+
+  - id: chats.new_message_dialog
+    name: "New message dialog"
+    description: "Modal to start a new conversation: 'To:' recipient combobox listing all contacts."
+    route: "/chats"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues: []
+    elements:
+      - id: recipient_combobox
+        role: "searchable recipient picker, one contact per option"
+        locators:
+          web: { pattern: "getByRole('combobox')", type: role }
+        stability: anchor
+
+transitions:
+  - from: chats.inbox_empty
+    to: chats.thread
+    trigger: { action: click, element: conversation_item }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/chats/chats.spec.ts#wf.start_chat
+  - from: chats.inbox_empty
+    to: chats.new_message_dialog
+    trigger: { action: click, element: new_chat_button }
+    guards: []
+    description: ""
+    covered_by: []

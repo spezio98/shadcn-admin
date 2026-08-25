@@ -1,0 +1,11 @@
+workflow: wf.task_row_actions
+summary: "Tasks list -> open a row's kebab menu -> see Edit/Delete actions"
+preconditions: []
+steps:
+  - screen: tasks.list
+    action: { click: row_menu_button }
+  - screen: tasks.row_menu
+    assert: [menu_edit, menu_delete]
+covered_by:
+  - tests/tests/tasks/tasks.spec.ts#wf.task_row_actions
+known_issues: []

@@ -1,0 +1,11 @@
+workflow: wf.error_page_recovery
+summary: "401 error page -> Back to Home -> dashboard"
+preconditions: []
+steps:
+  - screen: errors.unauthorized
+    action: { click: back_to_home_button }
+  - screen: dashboard.overview
+    assert: [tab_overview]
+covered_by:
+  - tests/tests/errors/errors.spec.ts#wf.error_page_recovery
+known_issues: []

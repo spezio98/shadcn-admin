@@ -1,0 +1,86 @@
+gaps:
+  - id: gap.users_confirm_password_enable_condition
+    area: users.add_dialog
+    question: "confirm_password_input starts disabled; not verified whether/when filling Password enables it."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.otp_verify_enable_condition
+    area: auth.otp
+    question: "verify_button starts disabled; not verified whether/when entering a code enables it."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.dashboard_download_button_effect
+    area: dashboard.overview
+    question: "download_button's effect was never observed (no visible change, no download captured)."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.tasks_import_button_effect
+    area: tasks.list
+    question: "import_button's effect was never observed (not clicked; likely opens a file picker or dialog)."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.sidebar_toggle_effect
+    area: shell.sidebar
+    question: "sidebar_toggle was clicked but no visible layout change was confirmed in the snapshot; effect unconfirmed."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.user_menu_destinations
+    area: shell.user_menu
+    question: "menu_profile and menu_settings destinations were never followed; unknown whether they route to real screens or are stubs like Help Center."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.tasks_view_column_toggle_content
+    area: tasks.list
+    question: "view_button's column-visibility popover was never opened; its options are unknown."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.users_view_column_toggle_content
+    area: users.list
+    question: "view_button's column-visibility popover was never opened; its options are unknown."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.tasks_edit_dialog_prefill
+    area: tasks.row_menu
+    question: "menu_edit was never clicked; whether it reuses tasks.create_dialog pre-filled, or is a distinct screen, is unconfirmed."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.users_edit_dialog_prefill
+    area: users.row_menu
+    question: "menu_edit was never clicked; whether it reuses users.add_dialog pre-filled, or is a distinct screen, is unconfirmed."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.tasks_labels_submenu
+    area: tasks.row_menu
+    question: "menu_labels submenu content (which labels, single vs multi-select) was never opened."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.apps_connect_button_effect
+    area: apps.gallery
+    question: "app_card_connect_button was never clicked; whether it toggles state, opens an OAuth flow, or is inert is unknown."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.settings_form_submit_effects
+    area: settings
+    question: "no Update-* button (profile/account/preferences/notifications/display) was submitted; persistence behavior is unknown for the whole feature."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.auth_backend_behavior
+    area: auth
+    question: "no auth form (sign in/up, forgot password, OTP) was submitted; whether any backend validates credentials, and what a successful/failed submit does, is unknown. Nothing in the app currently appears to gate access behind these screens."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.chats_unread_badge_semantics
+    area: shell.sidebar
+    question: "nav_chats shows a static badge ('Chats 3'); whether it updates live or is hardcoded mock data is unknown."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.notifications_toast_region_unobserved
+    area: "*"
+    question: "a 'Notifications alt+T' toast region is present on every screen but no action during exploration triggered a visible toast; its content/styling is unknown."
+    blocking: []
+    opened: 2026-08-25
+  - id: gap.rtl_layout_unverified
+    area: shell.theme_settings_dialog
+    question: "direction_radiogroup offers Right to Left; selecting it and its effect on the rest of the app was not exercised."
+    blocking: []
+    opened: 2026-08-25

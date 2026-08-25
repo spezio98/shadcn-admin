@@ -1,0 +1,186 @@
+feature: users
+summary: "User List data table (50 pages of mock data), Invite/Add User dialogs, row Edit/Delete"
+
+screens:
+  - id: users.list
+    name: "User List"
+    description: "Paginated data table of users (10/page, 50 pages) with filter and faceted Status/Role dropdowns, column visibility toggle, row action menu."
+    route: "/users"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: filter_input
+        role: "free-text filter over users"
+        locators:
+          web: { pattern: "getByPlaceholder('Filter users...')", type: css }
+        stability: anchor
+      - id: status_facet
+        role: "multi-select faceted filter by status (Active/Inactive/Invited/Suspended), each with a count"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Status' })", type: role }
+        stability: anchor
+      - id: role_facet
+        role: "multi-select faceted filter by role"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Role' })", type: role }
+        stability: anchor
+      - id: view_button
+        role: "toggles column visibility"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'View' })", type: role }
+        stability: stable
+      - id: invite_user_button
+        role: "opens the Invite User dialog"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Invite User' })", type: role }
+        stability: anchor
+      - id: add_user_button
+        role: "opens the Add New User dialog"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Add User' })", type: role }
+        stability: anchor
+      - id: row_menu_button
+        role: "per-row kebab menu opening Edit/Delete actions"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Open menu' })", type: role }
+        stability: anchor
+        disambiguation: { index: 0 }
+      - id: pagination_next
+        role: "go to next page"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Go to next page' })", type: role }
+        stability: anchor
+
+  - id: users.add_dialog
+    name: "Add New User dialog"
+    description: "Modal form: First/Last name, Username, Email, Phone, Role combobox, Password + Confirm Password."
+    route: "/users"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.confirm_password_starts_disabled
+        summary: "Confirm Password field is disabled when the dialog first opens"
+    elements:
+      - id: first_name_input
+        role: "first name text field"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'First Name' })", type: role }
+        stability: anchor
+      - id: email_input
+        role: "email text field"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: role_combobox
+        role: "user role select"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Role' })", type: role }
+        stability: anchor
+      - id: password_input
+        role: "password field with a show/hide toggle"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Password' })", type: role }
+        stability: anchor
+      - id: confirm_password_input
+        role: "confirm-password field; starts disabled, unknown whether/when it enables (see gaps)"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Confirm Password' })", type: role }
+        stability: stable
+      - id: save_button
+        role: "submits the new user; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Save changes' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the dialog without saving"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+
+  - id: users.invite_dialog
+    name: "Invite User dialog"
+    description: "Modal form: Email, Role combobox, optional description note."
+    route: "/users"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: email_input
+        role: "invitee email"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: role_combobox
+        role: "role to assign on acceptance"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Role' })", type: role }
+        stability: anchor
+      - id: description_input
+        role: "optional personal note included in the invite email"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Description (optional)' })", type: role }
+        stability: stable
+      - id: invite_button
+        role: "sends the invitation; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Invite' })", type: role }
+        stability: anchor
+      - id: cancel_button
+        role: "closes the dialog without inviting"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Cancel' })", type: role }
+        stability: anchor
+
+  - id: users.row_menu
+    name: "User row action menu"
+    description: "Kebab menu opened from a table row: Edit, Delete."
+    route: "/users"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues: []
+    elements:
+      - id: menu_edit
+        role: "opens the Add-New-User-style form, pre-filled, to edit this user"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: 'Edit' })", type: role }
+        stability: anchor
+      - id: menu_delete
+        role: "deletes the row; destructive, not exercised"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: 'Delete' })", type: role }
+        stability: anchor
+
+transitions:
+  - from: users.list
+    to: users.add_dialog
+    trigger: { action: click, element: add_user_button }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: users.add_dialog
+    to: users.list
+    trigger: { action: click, element: close_button }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: users.list
+    to: users.invite_dialog
+    trigger: { action: click, element: invite_user_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/users/users.spec.ts#wf.invite_user
+  - from: users.invite_dialog
+    to: users.list
+    trigger: { action: click, element: cancel_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/users/users.spec.ts#wf.invite_user
+  - from: users.list
+    to: users.row_menu
+    trigger: { action: click, element: row_menu_button }
+    guards: []
+    description: ""
+    covered_by: []

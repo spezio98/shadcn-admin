@@ -1,0 +1,13 @@
+workflow: wf.invite_user
+summary: "Users list -> open Invite User dialog -> cancel -> back to list"
+preconditions: []
+steps:
+  - screen: users.list
+    action: { click: invite_user_button }
+  - screen: users.invite_dialog
+    action: { click: cancel_button }
+  - screen: users.list
+    assert: [invite_user_button]
+covered_by:
+  - tests/tests/users/users.spec.ts#wf.invite_user
+known_issues: []

@@ -1,0 +1,13 @@
+workflow: wf.customize_theme
+summary: "Header -> open Theme Settings dialog -> close -> back to header"
+preconditions: []
+steps:
+  - screen: shell.header
+    action: { click: theme_settings_button }
+  - screen: shell.theme_settings_dialog
+    action: { click: close_button }
+  - screen: shell.header
+    assert: [theme_settings_button]
+covered_by:
+  - tests/tests/shell/shell.spec.ts#wf.customize_theme
+known_issues: []

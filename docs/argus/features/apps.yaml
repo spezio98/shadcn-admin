@@ -1,0 +1,37 @@
+feature: apps
+summary: "App Integrations gallery: static grid of connect/connected cards, filter + sort"
+
+screens:
+  - id: apps.gallery
+    name: "App Integrations gallery"
+    description: "Grid of 14 integration cards (Discord, Docker, Figma, GitHub, GitLab, Gmail, Medium, Notion, Skype, Slack, Stripe, Telegram, Trello, WhatsApp, Zoom). Each card shows a Connect or Connected button; state is static mock data, no persistence verified."
+    route: "/apps"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: filter_input
+        role: "free-text filter over app names"
+        locators:
+          web: { pattern: "getByPlaceholder('Filter apps...')", type: css }
+        stability: anchor
+      - id: category_filter
+        role: "'All Apps' category dropdown"
+        locators:
+          web: { pattern: "text=All Apps", type: text }
+        stability: stable
+      - id: sort_dropdown
+        role: "sort order dropdown, unlabeled"
+        locators:
+          web: { pattern: "combobox", type: role }
+        stability: fragile
+        quirks: "no accessible name; disambiguate by position (second combobox on the page)"
+        disambiguation: { index: 1 }
+      - id: app_card_connect_button
+        role: "per-card action button, reads 'Connect' or 'Connected' depending on mock state"
+        locators:
+          web: { pattern: "getByRole('button', { name: /Connect|Connected/ })", type: role }
+        stability: stable
+        disambiguation: { index: 0 }
+
+transitions: []

@@ -1,0 +1,11 @@
+workflow: wf.dashboard_analytics
+summary: "Dashboard Overview tab -> switch to Analytics tab -> see traffic chart"
+preconditions: []
+steps:
+  - screen: dashboard.overview
+    action: { click: tab_analytics }
+  - screen: dashboard.analytics
+    assert: [traffic_chart]
+covered_by:
+  - tests/tests/dashboard/dashboard.spec.ts#wf.dashboard_analytics
+known_issues: []

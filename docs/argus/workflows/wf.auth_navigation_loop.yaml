@@ -1,0 +1,15 @@
+workflow: wf.auth_navigation_loop
+summary: "Sign in -> Forgot Password -> Sign Up -> Sign in, exercising every cross-link between the standalone auth pages"
+preconditions: []
+steps:
+  - screen: auth.sign_in
+    action: { click: forgot_password_link }
+  - screen: auth.forgot_password
+    action: { click: sign_up_link }
+  - screen: auth.sign_up
+    action: { click: sign_in_link }
+  - screen: auth.sign_in
+    assert: [email_input]
+covered_by:
+  - tests/tests/auth/auth.spec.ts#wf.auth_navigation_loop
+known_issues: []

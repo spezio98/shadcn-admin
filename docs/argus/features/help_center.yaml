@@ -1,0 +1,14 @@
+feature: help_center
+summary: "Help Center: placeholder 'Coming Soon!' page, no interactive elements"
+
+screens:
+  - id: help_center.placeholder
+    name: "Help Center — Coming Soon"
+    description: "Stub page: heading 'Coming Soon!' and one line of copy. No interactive content beyond the global shell."
+    route: "/help-center"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements: []
+
+transitions: []

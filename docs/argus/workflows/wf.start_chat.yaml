@@ -1,0 +1,11 @@
+workflow: wf.start_chat
+summary: "Inbox -> open a conversation -> see message history and compose box"
+preconditions: []
+steps:
+  - screen: chats.inbox_empty
+    action: { click: conversation_item }
+  - screen: chats.thread
+    assert: [message_textbox]
+covered_by:
+  - tests/tests/chats/chats.spec.ts#wf.start_chat
+known_issues: []

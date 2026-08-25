@@ -1,0 +1,106 @@
+feature: dashboard
+summary: "Home dashboard: KPI cards + chart, 2 usable tabs (Overview, Analytics), 2 disabled"
+
+screens:
+  - id: dashboard.overview
+    name: "Dashboard — Overview tab"
+    description: "Default landing screen. 4 KPI cards, a bar chart, and a recent-sales list."
+    route: "/"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.reports_notifications_disabled
+        summary: "Reports and Notifications tabs are disabled (no route, cannot be selected)"
+      - id: ki.secondary_nav_mostly_disabled
+        summary: "banner nav (Overview/Customers/Products/Settings): 3 of 4 links disabled, the 4th (Overview) is a dead route"
+    elements:
+      - id: secondary_nav_overview
+        role: "the only enabled link in the dashboard's own banner nav row; href is /dashboard/overview, a dead route (see known_issues)"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Overview' })", type: role }
+        stability: fragile
+        quirks: "navigating it renders the app-wide 404 page outside the shell; the route was never built"
+      - id: tab_overview
+        role: "selects the Overview tab"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Overview' })", type: role }
+        stability: anchor
+      - id: tab_analytics
+        role: "selects the Analytics tab"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Analytics' })", type: role }
+        stability: anchor
+      - id: tab_reports
+        role: "Reports tab, always disabled in this build"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Reports' })", type: role }
+        stability: stable
+      - id: tab_notifications
+        role: "Notifications tab, always disabled in this build"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Notifications' })", type: role }
+        stability: stable
+      - id: download_button
+        role: "header action; behavior not verified (no visible effect observed)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Download' })", type: role }
+        stability: stable
+      - id: kpi_total_revenue
+        role: "KPI card showing total revenue"
+        locators:
+          web: { pattern: "text=Total Revenue", type: text }
+        stability: anchor
+      - id: recent_sales_list
+        role: "list of 5 recent sales with name/email/amount"
+        locators:
+          web: { pattern: "text=Recent Sales", type: text }
+        stability: stable
+
+  - id: dashboard.analytics
+    name: "Dashboard — Analytics tab"
+    description: "Traffic chart, 4 stat cards (clicks/visitors/bounce/session), referrers and devices lists."
+    route: "/"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: tab_overview
+        role: "selects the Overview tab; same persistent tablist as dashboard.overview"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Overview' })", type: role }
+        stability: anchor
+      - id: tab_analytics
+        role: "selects the Analytics tab (currently active); same persistent tablist as dashboard.overview"
+        locators:
+          web: { pattern: "getByRole('tab', { name: 'Analytics' })", type: role }
+        stability: anchor
+      - id: traffic_chart
+        role: "weekly clicks/visitors bar chart"
+        locators:
+          web: { pattern: "text=Traffic Overview", type: text }
+        stability: stable
+      - id: referrers_list
+        role: "top referrer sources with counts"
+        locators:
+          web: { pattern: "text=Referrers", type: text }
+        stability: stable
+      - id: devices_list
+        role: "device-type breakdown with percentages"
+        locators:
+          web: { pattern: "text=Devices", type: text }
+        stability: stable
+
+transitions:
+  - from: dashboard.overview
+    to: dashboard.analytics
+    trigger: { action: click, element: tab_analytics }
+    guards: []
+    description: "Client-side tab switch, no route change."
+    covered_by:
+      - tests/tests/dashboard/dashboard.spec.ts#wf.dashboard_analytics
+  - from: dashboard.analytics
+    to: dashboard.overview
+    trigger: { action: click, element: tab_overview }
+    guards: []
+    description: "Client-side tab switch, no route change."
+    covered_by: []

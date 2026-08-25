@@ -1,0 +1,192 @@
+feature: settings
+summary: "Settings: Profile, Account, Appearance, Notifications, Display — shared side-nav layout"
+
+screens:
+  - id: settings.profile
+    name: "Settings — Profile"
+    description: "Default settings screen. Username, verified-email combobox, bio, repeatable URL fields."
+    route: "/settings"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.side_nav_links_unnamed
+        summary: "the 5 settings side-nav links carry no accessible name; disambiguate by href, not role name"
+    elements:
+      - id: side_nav
+        role: "left side-nav switching between the 5 settings sub-pages"
+        locators:
+          web: { pattern: "getByRole('navigation')", type: role }
+        stability: fragile
+        quirks: "each link has no accessible name; target only by its href (see known_issues)"
+      - id: username_input
+        role: "public display name, changeable once per 30 days per copy"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Username' })", type: role }
+        stability: anchor
+      - id: bio_input
+        role: "free-text bio, supports @mentions per copy"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Bio' })", type: role }
+        stability: anchor
+      - id: add_url_button
+        role: "appends another URL field"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Add URL' })", type: role }
+        stability: stable
+      - id: update_profile_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Update profile' })", type: role }
+        stability: anchor
+
+  - id: settings.account
+    name: "Settings — Account"
+    description: "Name, date-of-birth picker, language combobox."
+    route: "/settings/account"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: side_nav
+        role: "left side-nav switching between the 5 settings sub-pages; same nav as settings.profile"
+        locators:
+          web: { pattern: "getByRole('navigation')", type: role }
+        stability: fragile
+        quirks: "each link has no accessible name; target only by its href"
+      - id: name_input
+        role: "display name"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Name' })", type: role }
+        stability: anchor
+      - id: date_of_birth_button
+        role: "opens a date picker; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Pick a date' })", type: role }
+        stability: stable
+      - id: language_combobox
+        role: "dashboard language select"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Language' })", type: role }
+        stability: anchor
+      - id: update_account_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Update account' })", type: role }
+        stability: anchor
+
+  - id: settings.appearance
+    name: "Settings — Appearance"
+    description: "Font select (inter/manrope/system) and Light/Dark theme radiogroup. Distinct from the header's quick theme-toggle button (shell)."
+    route: "/settings/appearance"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: side_nav
+        role: "left side-nav switching between the 5 settings sub-pages; same nav as settings.profile"
+        locators:
+          web: { pattern: "getByRole('navigation')", type: role }
+        stability: fragile
+        quirks: "each link has no accessible name; target only by its href"
+      - id: font_select
+        role: "native select: inter (default) / manrope / system"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Font' })", type: role }
+        stability: anchor
+      - id: theme_radiogroup
+        role: "Light / Dark"
+        locators:
+          web: { pattern: "getByRole('radiogroup')", type: role }
+        stability: anchor
+      - id: update_preferences_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Update preferences' })", type: role }
+        stability: anchor
+
+  - id: settings.notifications
+    name: "Settings — Notifications"
+    description: "Notify-me radiogroup, 4 email-notification switches (one disabled/always-on), a mobile-override checkbox."
+    route: "/settings/notifications"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.security_emails_locked_on
+        summary: "'Security emails' switch is checked and disabled — cannot be turned off in this build"
+    elements:
+      - id: side_nav
+        role: "left side-nav switching between the 5 settings sub-pages; same nav as settings.profile"
+        locators:
+          web: { pattern: "getByRole('navigation')", type: role }
+        stability: fragile
+        quirks: "each link has no accessible name; target only by its href"
+      - id: notify_radiogroup
+        role: "All new messages / Direct messages and mentions / Nothing"
+        locators:
+          web: { pattern: "getByRole('radiogroup')", type: role }
+        stability: anchor
+      - id: communication_emails_switch
+        role: "toggle communication emails"
+        locators:
+          web: { pattern: "getByRole('switch', { name: 'Communication emails' })", type: role }
+        stability: anchor
+      - id: security_emails_switch
+        role: "always on, disabled (see known_issues)"
+        locators:
+          web: { pattern: "getByRole('switch', { name: 'Security emails' })", type: role }
+        stability: stable
+      - id: mobile_override_checkbox
+        role: "use different settings for mobile devices"
+        locators:
+          web: { pattern: "getByRole('checkbox', { name: 'Use different settings for my mobile devices' })", type: role }
+        stability: stable
+      - id: update_notifications_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Update notifications' })", type: role }
+        stability: anchor
+
+  - id: settings.display
+    name: "Settings — Display"
+    description: "6 checkboxes controlling which sections appear in the app's own sidebar (Recents/Home checked by default; Applications/Desktop/Downloads/Documents unchecked)."
+    route: "/settings/display"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: recents_checkbox
+        role: "toggle Recents in the sidebar"
+        locators:
+          web: { pattern: "getByRole('checkbox', { name: 'Recents' })", type: role }
+        stability: anchor
+      - id: update_display_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Update display' })", type: role }
+        stability: anchor
+
+transitions:
+  - from: settings.profile
+    to: settings.account
+    trigger: { action: click, element: side_nav }
+    guards: []
+    description: "Click the side-nav item whose href is /settings/account."
+    covered_by: []
+  - from: settings.account
+    to: settings.appearance
+    trigger: { action: click, element: side_nav }
+    guards: []
+    description: "Click the side-nav item whose href is /settings/appearance."
+    covered_by: []
+  - from: settings.appearance
+    to: settings.notifications
+    trigger: { action: click, element: side_nav }
+    guards: []
+    description: "Click the side-nav item whose href is /settings/notifications."
+    covered_by: []
+  - from: settings.notifications
+    to: settings.display
+    trigger: { action: click, element: side_nav }
+    guards: []
+    description: "Click the side-nav item whose href is /settings/display."
+    covered_by: []

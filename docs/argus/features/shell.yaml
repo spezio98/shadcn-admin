@@ -1,0 +1,226 @@
+feature: shell
+summary: "Global chrome reachable from every screen: sidebar, header (search/theme/user), command palette"
+
+conditions: []
+
+screens:
+  - id: shell.sidebar
+    name: "App sidebar"
+    description: "Left navigation, present on every authenticated screen except the standalone auth pages (sign-in/sign-up/forgot-password/otp, which render without the shell). Sections: General (Dashboard/Tasks/Apps/Chats/Users), Pages (Auth/Errors — expandable submenus), Other (Settings — expandable submenu — /Help Center)."
+    route: null
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: nav_dashboard
+        role: "link to /"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Dashboard' })", type: role }
+        stability: anchor
+      - id: nav_tasks
+        role: "link to /tasks"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Tasks' })", type: role }
+        stability: anchor
+      - id: nav_apps
+        role: "link to /apps"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Apps' })", type: role }
+        stability: anchor
+      - id: nav_chats
+        role: "link to /chats; label includes an unread-count badge ('Chats 3')"
+        locators:
+          web: { pattern: "getByRole('link', { name: /Chats/ })", type: role }
+        stability: stable
+        quirks: "accessible name concatenates label and badge count, e.g. 'Chats 3'"
+      - id: nav_users
+        role: "link to /users"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Users' })", type: role }
+        stability: anchor
+      - id: nav_auth_group
+        role: "expands/collapses the Auth submenu (Sign In, Sign In (2 Col), Sign Up, Forgot Password, OTP)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Auth' })", type: role }
+        stability: anchor
+      - id: nav_errors_group
+        role: "expands/collapses the Errors submenu (Unauthorized, Forbidden, Not Found, Internal Server Error, Maintenance Error)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Errors' })", type: role }
+        stability: anchor
+      - id: nav_settings_group
+        role: "expands/collapses the Settings submenu (Profile, Account, Appearance, Notifications, Display)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Settings' })", type: role }
+        stability: anchor
+      - id: nav_help_center
+        role: "link to /help-center"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Help Center' })", type: role }
+        stability: anchor
+      - id: sidebar_toggle
+        role: "collapses/expands the sidebar; effect not confirmed visually (see gaps)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Toggle Sidebar' })", type: role }
+        stability: stable
+        disambiguation: { index: 0 }
+
+  - id: shell.header
+    name: "App header"
+    description: "Top banner present on every authenticated screen: sidebar toggle, Search/command-palette trigger, quick theme toggle, theme-settings trigger, user-avatar menu trigger."
+    route: null
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: search_button
+        role: "opens the command palette (same as pressing Cmd/Ctrl+K)"
+        locators:
+          web: { pattern: "getByRole('button', { name: /Search/ })", type: role }
+        stability: anchor
+      - id: theme_toggle_button
+        role: "quick light/dark toggle, distinct from the fuller Theme Settings dialog"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Toggle theme' })", type: role }
+        stability: anchor
+      - id: theme_settings_button
+        role: "opens the Theme Settings dialog (shell.theme_settings_dialog)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Open theme settings' })", type: role }
+        stability: anchor
+      - id: user_avatar_button
+        role: "opens the user menu (shell.user_menu); label is the user's initials, 'SN' in this build"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'SN' })", type: role }
+        stability: fragile
+        quirks: "accessible name is the current user's initials, not a fixed string"
+
+  - id: shell.command_palette
+    name: "Command palette"
+    description: "Cmd/Ctrl+K search-and-navigate overlay grouped into General / Pages / Other / Theme. Typing filters the list; Enter navigates to the selected item's route (verified: typing 'task' + Enter navigated to /tasks)."
+    route: null
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues:
+      - id: ki.cmdk_options_unnamed_in_snapshot
+        summary: "option rows show no visible text in the compact a11y snapshot; use eval/getByRole to read the accessible name"
+    elements:
+      - id: query_input
+        role: "filters the option list as you type"
+        locators:
+          web: { pattern: "getByRole('combobox')", type: role }
+        stability: anchor
+      - id: theme_light_option
+        role: "sets theme to Light directly from the palette"
+        locators:
+          web: { pattern: "getByRole('option', { name: 'Light' })", type: role }
+        stability: anchor
+      - id: theme_dark_option
+        role: "sets theme to Dark directly from the palette"
+        locators:
+          web: { pattern: "getByRole('option', { name: 'Dark' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the palette"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+
+  - id: shell.theme_settings_dialog
+    name: "Theme Settings dialog"
+    description: "4 radiogroups (Theme: System/Light/Dark; Sidebar: Inset/Floating/Sidebar; Layout: Default/Compact/Full layout; Direction: Left to Right/Right to Left) plus a Reset button. Broader than the header's quick theme_toggle_button."
+    route: null
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: theme_radiogroup
+        role: "System / Light / Dark"
+        locators:
+          web: { pattern: "getByRole('radiogroup', { name: 'Select theme preference' })", type: role }
+        stability: anchor
+      - id: sidebar_style_radiogroup
+        role: "Inset / Floating / Sidebar"
+        locators:
+          web: { pattern: "getByRole('radiogroup', { name: 'Select sidebar style' })", type: role }
+        stability: anchor
+      - id: layout_radiogroup
+        role: "Default / Compact / Full layout"
+        locators:
+          web: { pattern: "getByRole('radiogroup', { name: 'Select layout style' })", type: role }
+        stability: anchor
+      - id: direction_radiogroup
+        role: "Left to Right / Right to Left"
+        locators:
+          web: { pattern: "getByRole('radiogroup', { name: 'Select site direction' })", type: role }
+        stability: anchor
+      - id: reset_button
+        role: "resets all 4 settings to default; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Reset' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the dialog"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+
+  - id: shell.user_menu
+    name: "User menu"
+    description: "Dropdown from the header avatar: identity header (name/email), Profile/Billing/Settings/New Team, Sign out. Keyboard shortcuts shown are decorative (not verified to be wired: ⇧⌘P, ⌘B, ⌘S, ⇧⌘Q)."
+    route: null
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues: []
+    elements:
+      - id: menu_profile
+        role: "not exercised; destination not verified"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: /Profile/ })", type: role }
+        stability: stable
+      - id: menu_settings
+        role: "not exercised; destination not verified"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: /Settings/ })", type: role }
+        stability: stable
+      - id: menu_sign_out
+        role: "signs the user out; destructive to the session, not exercised"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: /Sign out/ })", type: role }
+        stability: anchor
+
+transitions:
+  - from: shell.header
+    to: shell.command_palette
+    trigger: { action: click, element: search_button }
+    guards: []
+    description: "Also reachable via Cmd/Ctrl+K from anywhere the shell is mounted."
+    covered_by:
+      - tests/tests/shell/shell.spec.ts#wf.command_palette_navigate
+  - from: shell.command_palette
+    to: tasks.list
+    trigger: { action: type, element: query_input, text: "task" }
+    guards: []
+    description: "Typing 'task' filters to one General-group result; pressing Enter afterward navigates to /tasks. Representative of the palette's general navigate-by-typing behavior."
+    covered_by:
+      - tests/tests/shell/shell.spec.ts#wf.command_palette_navigate
+  - from: shell.header
+    to: shell.theme_settings_dialog
+    trigger: { action: click, element: theme_settings_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/shell/shell.spec.ts#wf.customize_theme
+  - from: shell.header
+    to: shell.user_menu
+    trigger: { action: click, element: user_avatar_button }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: shell.theme_settings_dialog
+    to: shell.header
+    trigger: { action: click, element: close_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/shell/shell.spec.ts#wf.customize_theme

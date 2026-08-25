@@ -1,0 +1,47 @@
+app:
+  name: "shadcn-admin"
+  platforms: [web]
+  version_explored: "2.2.1"
+  entry_screen: dashboard.overview
+
+features:
+  - id: shell
+    summary: "Global chrome reachable from every screen: sidebar, header (search/theme/user), command palette"
+  - id: dashboard
+    summary: "Home dashboard: KPI cards + chart, 2 usable tabs (Overview, Analytics), 2 disabled"
+  - id: tasks
+    summary: "Tasks data table: filter/facet by status+priority, create/edit/delete, pagination"
+  - id: apps
+    summary: "App Integrations gallery: static grid of connect/connected cards, filter + sort"
+  - id: chats
+    summary: "Inbox: conversation list, thread view with message history, new-message dialog"
+  - id: users
+    summary: "User List data table (50 pages of mock data), Invite/Add User dialogs, row Edit/Delete"
+  - id: auth
+    summary: "Sign in (1 and 2-column layouts), sign up, forgot password, OTP — standalone auth pages"
+  - id: errors
+    summary: "5 static error pages (401/403/404/500/503), each with Go Back / Back to Home"
+  - id: settings
+    summary: "Settings: Profile, Account, Appearance, Notifications, Display — shared side-nav layout"
+  - id: help_center
+    summary: "Help Center: placeholder 'Coming Soon!' page, no interactive elements"
+
+workflows:
+  - id: wf.create_task_dialog
+    summary: "Tasks list -> open Create Task dialog -> close without saving -> back to list"
+  - id: wf.task_row_actions
+    summary: "Tasks list -> open a row's kebab menu -> see Edit/Delete actions"
+  - id: wf.dashboard_analytics
+    summary: "Dashboard Overview tab -> switch to Analytics tab -> see traffic chart"
+  - id: wf.command_palette_navigate
+    summary: "Open the command palette from the header, type to filter, land on Tasks"
+  - id: wf.customize_theme
+    summary: "Header -> open Theme Settings dialog -> close -> back to header"
+  - id: wf.start_chat
+    summary: "Inbox -> open a conversation -> see message history and compose box"
+  - id: wf.invite_user
+    summary: "Users list -> open Invite User dialog -> cancel -> back to list"
+  - id: wf.auth_navigation_loop
+    summary: "Sign in -> Forgot Password -> Sign Up -> Sign in, exercising every cross-link between the standalone auth pages"
+  - id: wf.error_page_recovery
+    summary: "401 error page -> Back to Home -> dashboard"

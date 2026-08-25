@@ -1,0 +1,72 @@
+feature: errors
+summary: "5 static error pages (401/403/404/500/503), each with Go Back / Back to Home"
+
+screens:
+  - id: errors.unauthorized
+    name: "401 Unauthorized"
+    description: "Static error page inside the normal app shell (sidebar/header still present)."
+    route: "/errors/unauthorized"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: go_back_button
+        role: "browser-back navigation"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Go Back' })", type: role }
+        stability: anchor
+      - id: back_to_home_button
+        role: "navigates to the dashboard"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Back to Home' })", type: role }
+        stability: anchor
+
+  - id: errors.forbidden
+    name: "403 Forbidden"
+    description: "Static error page, same layout/elements as errors.unauthorized."
+    route: "/errors/forbidden"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements: []
+
+  - id: errors.not_found
+    name: "404 Not Found"
+    description: "Static error page, same layout/elements as errors.unauthorized."
+    route: "/errors/not-found"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements: []
+
+  - id: errors.internal_server_error
+    name: "500 Internal Server Error"
+    description: "Static error page, same layout/elements as errors.unauthorized."
+    route: "/errors/internal-server-error"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements: []
+
+  - id: errors.maintenance
+    name: "503 Maintenance"
+    description: "Static error page. Unlike the other 4, it has only a single 'Learn more' button (not exercised) and no Go Back/Back to Home."
+    route: "/errors/maintenance-error"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: learn_more_button
+        role: "sole action on this page; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Learn more' })", type: role }
+        stability: anchor
+
+transitions:
+  - from: errors.unauthorized
+    to: dashboard.overview
+    trigger: { action: click, element: back_to_home_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/errors/errors.spec.ts#wf.error_page_recovery

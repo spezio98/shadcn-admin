@@ -1,0 +1,171 @@
+feature: auth
+summary: "Sign in (1 and 2-column layouts), sign up, forgot password, OTP — standalone auth pages"
+
+screens:
+  - id: auth.sign_in
+    name: "Sign in"
+    description: "Single-column sign-in form with email/password, social OAuth buttons, link to Sign Up and Forgot password."
+    route: "/sign-in"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: email_input
+        role: "email address"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: password_input
+        role: "password, with show/hide toggle"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Password' })", type: role }
+        stability: anchor
+      - id: sign_in_button
+        role: "submits the form; not exercised (no backend verified)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Sign in' })", type: role }
+        stability: anchor
+      - id: forgot_password_link
+        role: "navigates to Forgot Password"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Forgot password?' })", type: role }
+        stability: anchor
+      - id: sign_up_link
+        role: "navigates to Sign Up"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Sign Up' })", type: role }
+        stability: anchor
+      - id: github_button
+        role: "OAuth with GitHub; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'GitHub' })", type: role }
+        stability: stable
+      - id: facebook_button
+        role: "OAuth with Facebook; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Facebook' })", type: role }
+        stability: stable
+
+  - id: auth.sign_in_2col
+    name: "Sign in (2 Col)"
+    description: "Same sign-in form as auth.sign_in, in a two-column layout with a decorative image panel. Same elements/behavior."
+    route: "/sign-in-2"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues: []
+    elements: []
+
+  - id: auth.sign_up
+    name: "Sign up"
+    description: "Create-account form: email, password, confirm password, social OAuth, link to Sign In."
+    route: "/sign-up"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: email_input
+        role: "email address"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: confirm_password_input
+        role: "must match Password; validation not exercised"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Confirm Password' })", type: role }
+        stability: anchor
+      - id: create_account_button
+        role: "submits the form; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Create Account' })", type: role }
+        stability: anchor
+      - id: sign_in_link
+        role: "navigates to Sign In"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Sign In' })", type: role }
+        stability: anchor
+
+  - id: auth.forgot_password
+    name: "Forgot Password"
+    description: "Single email field; sends a reset link (not exercised)."
+    route: "/forgot-password"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: email_input
+        role: "registered email"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: continue_button
+        role: "submits the reset request; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Continue' })", type: role }
+        stability: anchor
+      - id: sign_up_link
+        role: "navigates to Sign Up"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Sign up' })", type: role }
+        stability: anchor
+
+  - id: auth.otp
+    name: "Two-factor Authentication (OTP)"
+    description: "One-time-password input; Verify button starts disabled until a code is entered (not exercised)."
+    route: "/otp"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.verify_starts_disabled
+        summary: "Verify button is disabled when the screen first loads"
+    elements:
+      - id: otp_input
+        role: "one-time password code entry"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'One-Time Password' })", type: role }
+        stability: anchor
+      - id: verify_button
+        role: "submits the code; starts disabled, unknown whether/when it enables (see gaps)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Verify' })", type: role }
+        stability: anchor
+      - id: resend_link
+        role: "requests a new code; routes back to /sign-in rather than resending in place"
+        locators:
+          web: { pattern: "getByRole('link', { name: 'Resend a new code.' })", type: role }
+        stability: fragile
+        quirks: "labeled as a resend action but its href is /sign-in, not an in-place resend"
+
+transitions:
+  - from: auth.sign_in
+    to: auth.sign_up
+    trigger: { action: click, element: sign_up_link }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: auth.sign_in
+    to: auth.forgot_password
+    trigger: { action: click, element: forgot_password_link }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.auth_navigation_loop
+  - from: auth.sign_up
+    to: auth.sign_in
+    trigger: { action: click, element: sign_in_link }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.auth_navigation_loop
+  - from: auth.forgot_password
+    to: auth.sign_up
+    trigger: { action: click, element: sign_up_link }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.auth_navigation_loop
+  - from: auth.otp
+    to: auth.sign_in
+    trigger: { action: click, element: resend_link }
+    guards: []
+    description: "Link text implies resend, but it navigates back to sign-in rather than resending in place (see quirks)."
+    covered_by: []

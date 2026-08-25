@@ -1,0 +1,13 @@
+workflow: wf.command_palette_navigate
+summary: "Open the command palette from the header, type to filter, land on Tasks"
+preconditions: []
+steps:
+  - screen: shell.header
+    action: { click: search_button }
+  - screen: shell.command_palette
+    action: { type: { element: query_input, text: "task" } }
+  - screen: tasks.list
+    assert: [filter_input]
+covered_by:
+  - tests/tests/shell/shell.spec.ts#wf.command_palette_navigate
+known_issues: []

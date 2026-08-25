@@ -1,0 +1,13 @@
+workflow: wf.create_task_dialog
+summary: "Tasks list -> open Create Task dialog -> close without saving -> back to list"
+preconditions: []
+steps:
+  - screen: tasks.list
+    action: { click: create_button }
+  - screen: tasks.create_dialog
+    action: { click: close_button }
+  - screen: tasks.list
+    assert: [create_button]
+covered_by:
+  - tests/tests/tasks/tasks.spec.ts#wf.create_task_dialog
+known_issues: []

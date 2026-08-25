@@ -1,0 +1,147 @@
+feature: tasks
+summary: "Tasks data table: filter/facet by status+priority, create/edit/delete, pagination"
+
+screens:
+  - id: tasks.list
+    name: "Tasks list"
+    description: "Paginated data table of tasks (10/page, 10 pages of mock data) with filter and faceted Status/Priority dropdowns, column visibility toggle, row action menu."
+    route: "/tasks"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: filter_input
+        role: "free-text filter by title or ID"
+        locators:
+          web: { pattern: "getByPlaceholder('Filter by title or ID...')", type: css }
+        stability: anchor
+      - id: status_facet
+        role: "multi-select faceted filter by status (Backlog/Todo/In Progress/Done/Canceled), each with a count"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Status' })", type: role }
+        stability: anchor
+      - id: priority_facet
+        role: "multi-select faceted filter by priority"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Priority' })", type: role }
+        stability: anchor
+      - id: view_button
+        role: "toggles column visibility"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'View' })", type: role }
+        stability: stable
+      - id: import_button
+        role: "header action; behavior not verified"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Import' })", type: role }
+        stability: stable
+      - id: create_button
+        role: "opens the Create Task dialog"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Create' })", type: role }
+        stability: anchor
+      - id: row_menu_button
+        role: "per-row kebab menu opening Edit/Labels/Delete actions"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Open menu' })", type: role }
+        stability: anchor
+        disambiguation: { index: 0 }
+      - id: pagination_rows_per_page
+        role: "rows-per-page selector, default 10"
+        locators:
+          web: { pattern: "text=Rows per page", type: text }
+        stability: stable
+      - id: pagination_next
+        role: "go to next page"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Go to next page' })", type: role }
+        stability: anchor
+
+  - id: tasks.create_dialog
+    name: "Create Task dialog"
+    description: "Modal form: Title text, Status combobox, Label radiogroup (Documentation/Feature/Bug), Priority radiogroup (High/Medium/Low)."
+    route: "/tasks"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: title_input
+        role: "task title text field"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Title' })", type: role }
+        stability: anchor
+      - id: status_combobox
+        role: "task status select"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Status' })", type: role }
+        stability: anchor
+      - id: label_radiogroup
+        role: "task label: Documentation / Feature / Bug"
+        locators:
+          web: { pattern: "getByRole('radiogroup').first()", type: role }
+        stability: stable
+      - id: priority_radiogroup
+        role: "task priority: High / Medium / Low"
+        locators:
+          web: { pattern: "getByRole('radiogroup').last()", type: role }
+        stability: stable
+      - id: save_button
+        role: "submits the new task; not exercised (avoided mutating mock data)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Save changes' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the dialog without saving"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+        disambiguation: { index: 0 }
+
+  - id: tasks.row_menu
+    name: "Task row action menu"
+    description: "Kebab menu opened from a table row."
+    route: "/tasks"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: sampled }
+    known_issues:
+      - id: ki.row_menu_partial_disabled
+        summary: "'Make a copy' and 'Favorite' menu items are always disabled in this build"
+    elements:
+      - id: menu_edit
+        role: "opens the same form as Create, pre-filled, to edit this task"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: 'Edit' })", type: role }
+        stability: anchor
+      - id: menu_labels
+        role: "submenu to change the task's label"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: 'Labels' })", type: role }
+        stability: stable
+      - id: menu_delete
+        role: "deletes the row; destructive, not exercised"
+        locators:
+          web: { pattern: "getByRole('menuitem', { name: 'Delete' })", type: role }
+        stability: anchor
+
+transitions:
+  - from: tasks.list
+    to: tasks.create_dialog
+    trigger: { action: click, element: create_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/tasks/tasks.spec.ts#wf.create_task_dialog
+  - from: tasks.create_dialog
+    to: tasks.list
+    trigger: { action: click, element: close_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/tasks/tasks.spec.ts#wf.create_task_dialog
+  - from: tasks.list
+    to: tasks.row_menu
+    trigger: { action: click, element: row_menu_button }
+    guards: []
+    description: ""
+    covered_by:
+      - tests/tests/tasks/tasks.spec.ts#wf.task_row_actions
