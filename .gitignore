@@ -41,6 +41,12 @@ dist-ssr
 /playwright-report/
 /test-results/
 
+# Business report pipeline (playwright-report-business skill)
+/results.json
+/steps.json
+/run.json
+/report-business.html
+
 # local tool state (Claude Code skills, tokensave code-graph cache)
 /.claude/
 /.tokensave/

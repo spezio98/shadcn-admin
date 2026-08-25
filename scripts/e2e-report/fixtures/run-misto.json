@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "id": "17234891234",
+    "attempt": 1,
+    "url": "https://github.com/acme/webshop/actions/runs/17234891234",
+    "status": "completed",
+    "environment": {
+      "id": "staging",
+      "label": "Staging",
+      "isProduction": false
+    },
+    "suiteLabel": "Tutti i test",
+    "triggeredBy": "m.bianchi",
+    "startedAt": "2026-08-25T12:32:00.000Z",
+    "finishedAt": "2026-08-25T12:38:12.000Z",
+    "durationMs": 372000,
+    "timezone": "Europe/Rome",
+    "commit": {
+      "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "shortSha": "a1b2c3d",
+      "branch": "main",
+      "message": "Fix validazione email in registrazione"
+    }
+  },
+  "stats": {
+    "total": 10,
+    "passed": 5,
+    "failed": 3,
+    "flaky": 1,
+    "skipped": 1,
+    "passRate": 55.6,
+    "durationMs": 372000
+  },
+  "areas": [
+    {
+      "id": "altro",
+      "label": "Altro",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "flaky": 0,
+      "skipped": 0,
+      "status": "broken"
+    },
+    {
+      "id": "onboarding",
+      "label": "Onboarding",
+      "total": 3,
+      "passed": 1,
+      "failed": 2,
+      "flaky": 0,
+      "skipped": 0,
+      "status": "broken"
+    },
+    {
+      "id": "checkout",
+      "label": "Checkout",
+      "total": 3,
+      "passed": 2,
+      "failed": 0,
+      "flaky": 1,
+      "skipped": 0,
+      "status": "degraded"
+    },
+    {
+      "id": "fatturazione",
+      "label": "Fatturazione",
+      "total": 3,
+      "passed": 2,
+      "failed": 0,
+      "flaky": 0,
+      "skipped": 1,
+      "status": "ok"
+    }
+  ],
+  "tests": [
+    {
+      "id": "98c9a004",
+      "title": "La pagina di stato del servizio e raggiungibile",
+      "file": "tests/monitoraggio/stato.spec.ts",
+      "area": "altro",
+      "status": "failed",
+      "durationMs": 340,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": {
+        "category": "unknown",
+        "human": null,
+        "raw": "Error: Cannot find module '../helpers/stato-client' imported from tests/monitoraggio/stato.spec.ts",
+        "location": {
+          "file": "tests/monitoraggio/stato.spec.ts",
+          "line": 3
+        }
+      },
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "c38dc8e5",
+      "title": "Il cliente invita un collega nel proprio spazio di lavoro",
+      "file": "tests/onboarding/invito.spec.ts",
+      "area": "onboarding",
+      "status": "failed",
+      "durationMs": 12800,
+      "attempts": 2,
+      "skipReason": null,
+      "steps": [
+        {
+          "index": 0,
+          "title": "Preparazione del test",
+          "status": "failed",
+          "durationMs": 12400
+        }
+      ],
+      "failedStepIndex": 0,
+      "error": {
+        "category": "network",
+        "human": "Il server ha risposto con un errore durante il test.",
+        "raw": "Error: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces",
+        "location": {
+          "file": "tests/onboarding/fixtures.ts",
+          "line": 22
+        }
+      },
+      "attachments": {
+        "screenshot": null,
+        "video": "test-results/onboarding-invito-chromium-retry1/video.webm",
+        "trace": "test-results/onboarding-invito-chromium-retry1/trace.zip"
+      }
+    },
+    {
+      "id": "300f88f1",
+      "title": "Il nuovo cliente completa la registrazione con email aziendale",
+      "file": "tests/onboarding/registrazione.spec.ts",
+      "area": "onboarding",
+      "status": "failed",
+      "durationMs": 62480,
+      "attempts": 2,
+      "skipReason": null,
+      "steps": [
+        {
+          "index": 0,
+          "title": "Apertura della pagina di registrazione",
+          "status": "passed",
+          "durationMs": 1200
+        },
+        {
+          "index": 1,
+          "title": "Inserimento dei dati anagrafici",
+          "status": "passed",
+          "durationMs": 2400
+        },
+        {
+          "index": 2,
+          "title": "Inserimento email aziendale",
+          "status": "passed",
+          "durationMs": 800
+        },
+        {
+          "index": 3,
+          "title": "Invio del modulo",
+          "status": "passed",
+          "durationMs": 1500
+        },
+        {
+          "index": 4,
+          "title": "Conferma del codice via email",
+          "status": "failed",
+          "durationMs": 30000
+        }
+      ],
+      "failedStepIndex": 4,
+      "error": {
+        "category": "timeout",
+        "human": "La pagina non ha risposto entro 30 secondi.",
+        "raw": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Conferma codice' })",
+        "location": {
+          "file": "tests/onboarding/registrazione.spec.ts",
+          "line": 47
+        }
+      },
+      "attachments": {
+        "screenshot": "test-results/onboarding-registrazione-chromium-retry1/test-failed-1.png",
+        "video": "test-results/onboarding-registrazione-chromium-retry1/video.webm",
+        "trace": "test-results/onboarding-registrazione-chromium-retry1/trace.zip"
+      }
+    },
+    {
+      "id": "66e0aec5",
+      "title": "Il cliente completa un acquisto con carta di credito",
+      "file": "tests/checkout/acquisto.spec.ts",
+      "area": "checkout",
+      "status": "flaky",
+      "durationMs": 58200,
+      "attempts": 2,
+      "skipReason": null,
+      "steps": [
+        {
+          "index": 0,
+          "title": "Apertura della scheda prodotto",
+          "status": "passed",
+          "durationMs": 1800
+        },
+        {
+          "index": 1,
+          "title": "Aggiunta al carrello",
+          "status": "passed",
+          "durationMs": 1100
+        },
+        {
+          "index": 2,
+          "title": "Apertura del riepilogo ordine",
+          "status": "passed",
+          "durationMs": 900
+        },
+        {
+          "index": 3,
+          "title": "Inserimento dati carta",
+          "status": "failed",
+          "durationMs": 15200
+        }
+      ],
+      "failedStepIndex": 3,
+      "error": {
+        "category": "elementNotFound",
+        "human": "Un elemento atteso non e comparso sulla pagina.",
+        "raw": "Error: locator.fill: Element is not attached to the DOM\nCall log:\n  - waiting for getByLabel('CVV')",
+        "location": {
+          "file": "tests/checkout/acquisto.spec.ts",
+          "line": 88
+        }
+      },
+      "attachments": {
+        "screenshot": "test-results/checkout-acquisto-chromium/test-failed-1.png",
+        "video": "test-results/checkout-acquisto-chromium/video.webm",
+        "trace": "test-results/checkout-acquisto-chromium/trace.zip"
+      }
+    },
+    {
+      "id": "8fee513e",
+      "title": "L'amministratore puo scaricare il registro delle fatture del mese",
+      "file": "tests/fatturazione/registro.spec.ts",
+      "area": "fatturazione",
+      "status": "skipped",
+      "durationMs": 0,
+      "attempts": 1,
+      "skipReason": "Disponibile solo dal terzo giorno del mese",
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "fa3bebde",
+      "title": "Il cliente puo svuotare il carrello prima di pagare",
+      "file": "tests/checkout/carrello.spec.ts",
+      "area": "checkout",
+      "status": "passed",
+      "durationMs": 18400,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "0b24a031",
+      "title": "Il cliente riceve l'email di conferma ordine",
+      "file": "tests/checkout/conferma.spec.ts",
+      "area": "checkout",
+      "status": "passed",
+      "durationMs": 26700,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "0478e8f7",
+      "title": "La fattura viene generata in PDF dopo il pagamento",
+      "file": "tests/fatturazione/emissione.spec.ts",
+      "area": "fatturazione",
+      "status": "passed",
+      "durationMs": 51900,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "1cd3ef2b",
+      "title": "Una nota di credito annulla la fattura collegata",
+      "file": "tests/fatturazione/nota-credito.spec.ts",
+      "area": "fatturazione",
+      "status": "passed",
+      "durationMs": 44300,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    },
+    {
+      "id": "d65569ad",
+      "title": "Il cliente aggiorna i dati di fatturazione dal profilo",
+      "file": "tests/onboarding/profilo.spec.ts",
+      "area": "onboarding",
+      "status": "passed",
+      "durationMs": 22900,
+      "attempts": 1,
+      "skipReason": null,
+      "steps": null,
+      "failedStepIndex": null,
+      "error": null,
+      "attachments": {
+        "screenshot": null,
+        "video": null,
+        "trace": null
+      }
+    }
+  ]
+}
