@@ -1,0 +1,60 @@
+name: E2E business report
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  e2e-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install browsers
+        run: pnpm test:browser:install
+
+      - name: Type-check e2e tests
+        run: pnpm exec tsc -p tests/tsconfig.json --noEmit
+
+      - name: Run Playwright tests
+        id: e2e
+        continue-on-error: true
+        run: node node_modules/@playwright/test/cli.js test
+
+      - name: Build business report
+        if: always()
+        continue-on-error: true
+        run: pnpm run report:build
+
+      - name: Write job summary
+        if: always()
+        continue-on-error: true
+        run: node scripts/e2e-report/summary.mjs --run run.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload developer report (with traces)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload business report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-business
+          path: report-business.html
+          retention-days: 14
