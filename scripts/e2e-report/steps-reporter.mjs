@@ -26,9 +26,19 @@ export default class StepsReporter {
   onTestEnd(test, result) {
     if (result.status === "passed" && result.retry === 0) return;
 
-    const file = isAbsolute(test.location.file) ? relative(process.cwd(), test.location.file) : test.location.file;
-    const project = test.parent?.project?.()?.name ?? "default";
-    const key = [file, ...test.titlePath().slice(1), project].join("\u0000");
+    // Il reporter JSON (extract.mjs) riceve i path delle spec relativi a testDir,
+    // non alla cwd: replicare qui la stessa base o gli id non combaciano mai.
+    const testProject = test.parent?.project?.();
+    const testDir = testProject?.testDir;
+    const absFile = test.location.file;
+    const file =
+      testDir && isAbsolute(absFile)
+        ? relative(testDir, absFile)
+        : isAbsolute(absFile)
+          ? relative(process.cwd(), absFile)
+          : absFile;
+    const project = testProject?.name ?? "default";
+    const key = [file, ...test.titlePath().slice(3), project].join("\u0000");
     const id = createHash("sha1").update(key).digest("hex").slice(0, 8);
 
     const serialize = (step) => ({

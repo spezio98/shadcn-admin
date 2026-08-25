@@ -238,7 +238,10 @@ for (const rootSuite of report.suites ?? []) {
       const chosen = relevantResult(status, results);
       const needsDetail = status === "failed" || status === "flaky";
 
-      const rawSteps = chosen?.steps ?? (externalSteps ? externalSteps[id] : null);
+      // Preferire sempre gli step esterni quando disponibili: alcune versioni del
+      // reporter JSON nativo popolano result.steps ma senza il campo "category",
+      // che serve per isolare i soli step di tipo test.step (vedi buildSteps).
+      const rawSteps = (externalSteps ? externalSteps[id] : undefined) ?? chosen?.steps;
       const { steps, failedStepIndex } = needsDetail ? buildSteps(rawSteps) : { steps: null, failedStepIndex: null };
 
       if (needsDetail && steps === null && rawSteps === undefined) {
