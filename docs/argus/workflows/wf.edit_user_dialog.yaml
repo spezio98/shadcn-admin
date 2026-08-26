@@ -13,5 +13,6 @@ steps:
     action: { click: close_button }
   - screen: users.list
     assert: [row_menu_button]
-covered_by: []
+covered_by:
+  - tests/tests/users/users.spec.ts#wf.edit_user_dialog
 known_issues: []

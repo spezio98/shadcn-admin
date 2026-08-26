@@ -235,10 +235,12 @@ transitions:
     trigger: { action: click, element: menu_edit }
     guards: []
     description: ""
-    covered_by: []
+    covered_by:
+      - tests/tests/users/users.spec.ts#wf.edit_user_dialog
   - from: users.edit_dialog
     to: users.list
     trigger: { action: click, element: close_button }
     guards: []
     description: ""
-    covered_by: []
+    covered_by:
+      - tests/tests/users/users.spec.ts#wf.edit_user_dialog

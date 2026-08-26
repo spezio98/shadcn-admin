@@ -190,10 +190,12 @@ transitions:
     trigger: { action: click, element: menu_edit }
     guards: []
     description: ""
-    covered_by: []
+    covered_by:
+      - tests/tests/tasks/tasks.spec.ts#wf.edit_task_dialog
   - from: tasks.edit_dialog
     to: tasks.list
     trigger: { action: click, element: close_button }
     guards: []
     description: ""
-    covered_by: []
+    covered_by:
+      - tests/tests/tasks/tasks.spec.ts#wf.edit_task_dialog

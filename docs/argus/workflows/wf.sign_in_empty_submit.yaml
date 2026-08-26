@@ -8,5 +8,6 @@ steps:
   - screen: auth.sign_in
     assert: [email_input, password_input]
     description: "Both fields become aria-invalid with inline 'Please enter your email.' / 'Please enter your password.' messages; sign_in_button stays enabled and the page stays on auth.sign_in."
-covered_by: []
+covered_by:
+  - tests/tests/auth/auth.spec.ts#wf.sign_in_empty_submit
 known_issues: []

@@ -142,13 +142,15 @@ transitions:
     trigger: { action: click, element: sign_in_button }
     guards: []
     description: "Only on valid input (well-formed email + 7+ char password); invalid input shows inline errors and stays on auth.sign_in."
-    covered_by: []
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.sign_in_success
   - from: auth.forgot_password
     to: auth.otp
     trigger: { action: click, element: continue_button }
     guards: []
     description: "Only on a valid (well-formed) email; invalid input shows an inline error and stays on auth.forgot_password."
-    covered_by: []
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.forgot_password_to_otp
   - from: auth.sign_in
     to: auth.sign_up
     trigger: { action: click, element: sign_up_link }

@@ -62,4 +62,35 @@ test.describe('users', { tag: '@users' }, () => {
       await expect(toastPayload).toContainText('"role": "manager"')
     })
   })
+
+  test("wf.edit_user_dialog: L'utente apre la modifica di un utente, lo vede precompilato e chiude senza salvare", async ({
+    page,
+  }) => {
+    await page.goto('/users')
+
+    const dialog = page.getByRole('dialog', { name: 'Edit User' })
+
+    await test.step("Apertura della modifica dalla riga della lista", async () => {
+      // users.list / row_menu_button (first row)
+      await page.getByRole('button', { name: 'Open menu' }).first().click()
+
+      // users.row_menu / menu_edit — opens a distinct dialog from Add, not reused.
+      await page.getByRole('menuitem', { name: 'Edit' }).click()
+      await expect(dialog).toBeVisible()
+    })
+
+    await test.step('Verifica della precompilazione con i dati della riga', async () => {
+      // users.edit_dialog / first_name_input, email_input, role_combobox
+      // Not blank/placeholder — genuinely pre-filled.
+      await expect(dialog.getByRole('textbox', { name: 'First Name' })).not.toHaveValue('')
+      await expect(dialog.getByRole('textbox', { name: 'Email' })).not.toHaveValue('')
+      await expect(dialog.getByRole('combobox', { name: 'Role' })).not.toHaveText('Select a role')
+    })
+
+    await test.step('Chiusura della finestra senza salvare', async () => {
+      // users.edit_dialog / close_button
+      await dialog.getByRole('button', { name: 'Close' }).click()
+      await expect(dialog).toBeHidden()
+    })
+  })
 })
