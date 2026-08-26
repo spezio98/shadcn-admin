@@ -106,4 +106,28 @@ test.describe('auth', { tag: '@auth' }, () => {
       await expect(page.getByText('{ "otp": "123456" }')).toBeVisible()
     })
   })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose. Same real
+  // workflow as wf.forgot_password_to_otp above (a second, deliberately-broken variant), not
+  // a synthetic report-demo case: every step is genuine, only the final assertion is wrong on
+  // purpose, to produce a "failed at step N" checklist over a full cross-screen video.
+  test('wf.forgot_password_to_otp: recupero password con email valida, verifica (volutamente sbagliata) del codice nella notifica', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in')
+
+    await test.step('Apertura di Password dimenticata e invio di una email valida', async () => {
+      await page.getByRole('link', { name: 'Forgot password?' }).click()
+      await page.getByRole('textbox', { name: 'Email' }).fill('test@example.com')
+      await page.getByRole('button', { name: 'Continue' }).click()
+      await expect(page).toHaveURL(/\/otp$/)
+    })
+
+    await test.step('Inserimento del codice OTP e verifica (volutamente sbagliata)', async () => {
+      await page.getByRole('textbox', { name: 'One-Time Password' }).fill('123456')
+      await page.getByRole('button', { name: 'Verify' }).click()
+      // Wrong on purpose: the code submitted was "123456", not "000000".
+      await expect(page.getByText('{ "otp": "000000" }')).toBeVisible()
+    })
+  })
 })

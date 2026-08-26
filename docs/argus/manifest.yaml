@@ -55,3 +55,5 @@ workflows:
     summary: "Tasks list -> row menu -> Edit -> pre-filled Update Task dialog -> close"
   - id: wf.edit_user_dialog
     summary: "Users list -> row menu -> Edit -> pre-filled Edit User dialog -> close"
+  - id: wf.create_task_via_search
+    summary: "Search 'task' via command palette -> Tasks list -> create and save a new task"
