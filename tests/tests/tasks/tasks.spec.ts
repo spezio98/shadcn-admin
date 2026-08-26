@@ -127,7 +127,9 @@ test.describe('tasks', { tag: '@tasks' }, () => {
     page,
   }) => {
     await page.goto('/tasks')
-    await page.getByRole('button', { name: 'Create Task Now Please' }).click()
+    // Short explicit timeout: the default 30s actionability wait proves nothing extra here
+    // and only bloats the recorded video for no benefit.
+    await page.getByRole('button', { name: 'Create Task Now Please' }).click({ timeout: 3000 })
   })
 
   // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
