@@ -66,6 +66,8 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
   // "element is not enabled", a different failure shape than a missing locator.
   test('report-demo: actionability timeout clicking a disabled tab', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('tab', { name: 'Reports' }).click()
+    // Short explicit timeout: the default 30s actionability wait proves nothing extra here
+    // and only bloats the recorded video for no benefit.
+    await page.getByRole('tab', { name: 'Reports' }).click({ timeout: 3000 })
   })
 })
