@@ -1,8 +1,11 @@
 name: Continuous Integration
 
-on: {}
-  # Triggers commented out temporarily — intentional failing tests in tests/tests/**
-  # (report-reading exercise) are being pushed and should not trigger CI runs.
+on:
+  # Manual-only for now — intentional failing tests in tests/tests/** (report-reading
+  # exercise) are being pushed and should not trigger CI runs. `on: {}` looked like it
+  # meant "no triggers" but GitHub Actions treats it as an invalid workflow, producing a
+  # failed run on every push instead of skipping it — workflow_dispatch is the valid way
+  # to keep this file present but non-automatic.
   # Restore before merging real work:
   # push:
   #   branches:
@@ -11,6 +14,7 @@ on: {}
   # pull_request:
   #   branches:
   #     - main
+  workflow_dispatch: {}
 
 jobs:
   install-lint-build:
