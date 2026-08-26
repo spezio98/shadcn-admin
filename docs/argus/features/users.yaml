@@ -83,7 +83,7 @@ screens:
           web: { pattern: "getByRole('textbox', { name: 'Password' })", type: role }
         stability: anchor
       - id: confirm_password_input
-        role: "confirm-password field; starts disabled, unknown whether/when it enables (see gaps)"
+        role: "confirm-password field; starts disabled, enables once Password is non-empty"
         locators:
           web: { pattern: "getByRole('textbox', { name: 'Confirm Password' })", type: role }
         stability: stable
@@ -132,16 +132,62 @@ screens:
           web: { pattern: "getByRole('button', { name: 'Cancel' })", type: role }
         stability: anchor
 
+  - id: users.edit_dialog
+    name: "Edit User dialog"
+    description: "Distinct dialog from Add (own heading 'Edit User'), pre-filled with the row's First/Last name, Username, Email, Phone and Role. Password/Confirm Password are blank."
+    route: "/users"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues:
+      - id: ki.confirm_password_starts_disabled
+        summary: "Confirm Password field is disabled when the dialog first opens, same as users.add_dialog"
+    elements:
+      - id: first_name_input
+        role: "first name text field; pre-filled with the row's first name"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'First Name' })", type: role }
+        stability: anchor
+      - id: email_input
+        role: "email text field; pre-filled with the row's email"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
+        stability: anchor
+      - id: role_combobox
+        role: "user role select; pre-filled with the row's role"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Role' })", type: role }
+        stability: anchor
+      - id: password_input
+        role: "password field with a show/hide toggle; blank (not pre-filled)"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Password' })", type: role }
+        stability: anchor
+      - id: confirm_password_input
+        role: "confirm-password field; starts disabled, enables once Password is non-empty"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Confirm Password' })", type: role }
+        stability: stable
+      - id: save_button
+        role: "submits the edit; not exercised"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Save changes' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the dialog without saving"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+
   - id: users.row_menu
     name: "User row action menu"
     description: "Kebab menu opened from a table row: Edit, Delete."
     route: "/users"
     preconditions: []
-    explored: { at: 2026-08-25, depth: sampled }
+    explored: { at: 2026-08-25, depth: full }
     known_issues: []
     elements:
       - id: menu_edit
-        role: "opens the Add-New-User-style form, pre-filled, to edit this user"
+        role: "opens users.edit_dialog, a distinct dialog from Add, pre-filled with this row"
         locators:
           web: { pattern: "getByRole('menuitem', { name: 'Edit' })", type: role }
         stability: anchor
@@ -181,6 +227,18 @@ transitions:
   - from: users.list
     to: users.row_menu
     trigger: { action: click, element: row_menu_button }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: users.row_menu
+    to: users.edit_dialog
+    trigger: { action: click, element: menu_edit }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: users.edit_dialog
+    to: users.list
+    trigger: { action: click, element: close_button }
     guards: []
     description: ""
     covered_by: []

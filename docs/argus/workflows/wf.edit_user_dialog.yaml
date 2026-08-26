@@ -1,0 +1,17 @@
+workflow: wf.edit_user_dialog
+summary: "Users list -> row menu -> Edit -> pre-filled Edit User dialog -> close without saving"
+preconditions: []
+steps:
+  - screen: users.list
+    action: { click: row_menu_button }
+  - screen: users.row_menu
+    action: { click: menu_edit }
+  - screen: users.edit_dialog
+    assert: [first_name_input, email_input, role_combobox]
+    description: "Fields are pre-filled from the row that was clicked; this is a distinct 'Edit User' dialog, not users.add_dialog reused. Password/Confirm Password are left blank."
+  - screen: users.edit_dialog
+    action: { click: close_button }
+  - screen: users.list
+    assert: [row_menu_button]
+covered_by: []
+known_issues: []

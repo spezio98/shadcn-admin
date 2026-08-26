@@ -97,23 +97,63 @@ screens:
         stability: anchor
         disambiguation: { index: 0 }
 
+  - id: tasks.edit_dialog
+    name: "Update Task dialog"
+    description: "Distinct dialog from Create (own heading 'Update Task'), pre-filled with the row's Title, Status, Label and Priority. Same field set as tasks.create_dialog."
+    route: "/tasks"
+    preconditions: []
+    explored: { at: 2026-08-25, depth: full }
+    known_issues: []
+    elements:
+      - id: title_input
+        role: "task title text field; pre-filled with the row's title"
+        locators:
+          web: { pattern: "getByRole('textbox', { name: 'Title' })", type: role }
+        stability: anchor
+      - id: status_combobox
+        role: "task status select; pre-filled with the row's status"
+        locators:
+          web: { pattern: "getByRole('combobox', { name: 'Status' })", type: role }
+        stability: anchor
+      - id: label_radiogroup
+        role: "task label: Documentation / Feature / Bug; pre-selected to the row's label"
+        locators:
+          web: { pattern: "getByRole('radiogroup').first()", type: role }
+        stability: stable
+      - id: priority_radiogroup
+        role: "task priority: High / Medium / Low; pre-selected to the row's priority"
+        locators:
+          web: { pattern: "getByRole('radiogroup').last()", type: role }
+        stability: stable
+      - id: save_button
+        role: "submits the edit; not exercised (avoided mutating mock data)"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Save changes' })", type: role }
+        stability: anchor
+      - id: close_button
+        role: "closes the dialog without saving"
+        locators:
+          web: { pattern: "getByRole('button', { name: 'Close' })", type: role }
+        stability: anchor
+        disambiguation: { index: 0 }
+
   - id: tasks.row_menu
     name: "Task row action menu"
     description: "Kebab menu opened from a table row."
     route: "/tasks"
     preconditions: []
-    explored: { at: 2026-08-25, depth: sampled }
+    explored: { at: 2026-08-25, depth: full }
     known_issues:
       - id: ki.row_menu_partial_disabled
         summary: "'Make a copy' and 'Favorite' menu items are always disabled in this build"
     elements:
       - id: menu_edit
-        role: "opens the same form as Create, pre-filled, to edit this task"
+        role: "opens tasks.edit_dialog, a distinct dialog from Create, pre-filled with this row"
         locators:
           web: { pattern: "getByRole('menuitem', { name: 'Edit' })", type: role }
         stability: anchor
       - id: menu_labels
-        role: "submenu to change the task's label"
+        role: "submenu: single-select radio list of the 3 labels, current one pre-checked"
         locators:
           web: { pattern: "getByRole('menuitem', { name: 'Labels' })", type: role }
         stability: stable
@@ -145,3 +185,15 @@ transitions:
     description: ""
     covered_by:
       - tests/tests/tasks/tasks.spec.ts#wf.task_row_actions
+  - from: tasks.row_menu
+    to: tasks.edit_dialog
+    trigger: { action: click, element: menu_edit }
+    guards: []
+    description: ""
+    covered_by: []
+  - from: tasks.edit_dialog
+    to: tasks.list
+    trigger: { action: click, element: close_button }
+    guards: []
+    description: ""
+    covered_by: []

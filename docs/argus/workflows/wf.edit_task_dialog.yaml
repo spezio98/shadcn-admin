@@ -1,0 +1,17 @@
+workflow: wf.edit_task_dialog
+summary: "Tasks list -> row menu -> Edit -> pre-filled Update Task dialog -> close without saving"
+preconditions: []
+steps:
+  - screen: tasks.list
+    action: { click: row_menu_button }
+  - screen: tasks.row_menu
+    action: { click: menu_edit }
+  - screen: tasks.edit_dialog
+    assert: [title_input, status_combobox, label_radiogroup, priority_radiogroup]
+    description: "All four fields are pre-filled/pre-selected from the row that was clicked; this is a distinct 'Update Task' dialog, not tasks.create_dialog reused."
+  - screen: tasks.edit_dialog
+    action: { click: close_button }
+  - screen: tasks.list
+    assert: [row_menu_button]
+covered_by: []
+known_issues: []
