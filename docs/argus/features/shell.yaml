@@ -197,6 +197,7 @@ transitions:
     description: "Also reachable via Cmd/Ctrl+K from anywhere the shell is mounted."
     covered_by:
       - tests/tests/shell/shell.spec.ts#wf.command_palette_navigate
+      - tests/tests/tasks/tasks.spec.ts#wf.create_task_via_search
   - from: shell.command_palette
     to: tasks.list
     trigger: { action: type, element: query_input, text: "task" }
@@ -204,6 +205,7 @@ transitions:
     description: "Typing 'task' filters to one General-group result; pressing Enter afterward navigates to /tasks. Representative of the palette's general navigate-by-typing behavior."
     covered_by:
       - tests/tests/shell/shell.spec.ts#wf.command_palette_navigate
+      - tests/tests/tasks/tasks.spec.ts#wf.create_task_via_search
   - from: shell.header
     to: shell.theme_settings_dialog
     trigger: { action: click, element: theme_settings_button }

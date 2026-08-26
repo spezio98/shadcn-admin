@@ -1,0 +1,18 @@
+workflow: wf.create_task_via_search
+summary: "Search 'task' via command palette from anywhere -> Tasks list -> create and save a new task"
+preconditions: []
+steps:
+  - screen: shell.header
+    action: { click: search_button }
+  - screen: shell.command_palette
+    action: { type: { element: query_input, text: "task" } }
+  - screen: tasks.list
+    action: { click: create_button }
+  - screen: tasks.create_dialog
+    action: { fill: { element: title_input, text: "..." } }
+    description: "Also fills status_combobox, label_radiogroup and priority_radiogroup before saving."
+  - screen: tasks.create_dialog
+    action: { click: save_button }
+covered_by:
+  - tests/tests/tasks/tasks.spec.ts#wf.create_task_via_search
+known_issues: []

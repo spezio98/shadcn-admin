@@ -145,4 +145,39 @@ test.describe('tasks', { tag: '@tasks' }, () => {
       .click()
     await expect(page).toHaveURL(/\/users$/)
   })
+
+  // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose. Every step
+  // is a genuine, modeled path (wf.create_task_via_search); only the final assertion is wrong
+  // on purpose, to produce a "failed at step N" checklist over a full multi-screen video.
+  test('wf.create_task_via_search: ricerca "task", crea e salva una nuova attività, verifica (volutamente sbagliata) della notifica', async ({
+    page,
+  }) => {
+    await page.goto('/')
+
+    await test.step('Navigazione a Tasks tramite la ricerca rapida', async () => {
+      await page.getByRole('button', { name: 'Search' }).click()
+      await page.getByRole('combobox').fill('task')
+      await page.keyboard.press('Enter')
+      await expect(page).toHaveURL(/\/tasks$/)
+    })
+
+    const title = `Report demo task ${Date.now()}`
+    const dialog = page.getByRole('dialog', { name: 'Create Task' })
+
+    await test.step('Apertura della finestra di creazione e compilazione dei dati', async () => {
+      await page.getByRole('button', { name: 'Create' }).click()
+      await dialog.getByRole('textbox', { name: 'Title' }).fill(title)
+      await dialog.getByRole('combobox', { name: 'Status' }).click()
+      await page.getByRole('option', { name: 'In Progress' }).click()
+      await dialog.getByRole('radio', { name: 'Feature' }).click()
+      await dialog.getByRole('radio', { name: 'High' }).click()
+    })
+
+    await test.step('Salvataggio e verifica (volutamente sbagliata) della notifica', async () => {
+      await dialog.getByRole('button', { name: 'Save changes' }).click()
+      const toastPayload = page.locator('code', { hasText: title })
+      // Wrong on purpose: the form was filled with "in progress", not "backlog".
+      await expect(toastPayload).toContainText('"status": "backlog"')
+    })
+  })
 })

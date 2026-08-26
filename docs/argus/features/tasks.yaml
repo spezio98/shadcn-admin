@@ -171,6 +171,7 @@ transitions:
     description: ""
     covered_by:
       - tests/tests/tasks/tasks.spec.ts#wf.create_task_dialog
+      - tests/tests/tasks/tasks.spec.ts#wf.create_task_via_search
   - from: tasks.create_dialog
     to: tasks.list
     trigger: { action: click, element: close_button }
