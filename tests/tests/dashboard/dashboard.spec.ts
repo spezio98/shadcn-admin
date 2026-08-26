@@ -20,6 +20,29 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
     })
   })
 
+  test("wf.dashboard_analytics: flaky demo — il grafico del traffico non viene visto in tempo al primo tentativo", async ({
+    page,
+  }, testInfo) => {
+    await page.goto('/')
+
+    await test.step('Apertura della scheda Analisi', async () => {
+      // dashboard.overview / tab_analytics
+      await page.getByRole('tab', { name: 'Analytics' }).click()
+    })
+
+    await test.step('Verifica (instabile) del grafico del traffico', async () => {
+      // dashboard.analytics / traffic_chart — same real workflow (wf.dashboard_analytics) as
+      // the test above; this variant fails on the first attempt and passes on retry, on
+      // purpose, to populate the report's "flaky" / "Da monitorare" category deterministically
+      // (testInfo.retry, not chance) rather than leaving it to a real, rare race condition.
+      if (testInfo.retry === 0) {
+        await expect(page.getByText('Traffic Overview')).toBeHidden({ timeout: 500 })
+      } else {
+        await expect(page.getByText('Traffic Overview')).toBeVisible()
+      }
+    })
+  })
+
   test('Le schede Report e Notifiche risultano disabilitate (problema noto)', async ({
     page,
   }) => {
