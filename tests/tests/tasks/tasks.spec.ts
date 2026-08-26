@@ -88,6 +88,38 @@ test.describe('tasks', { tag: '@tasks' }, () => {
     })
   })
 
+  test("wf.edit_task_dialog: L'utente apre la modifica di un'attività, la vede precompilata e la chiude senza salvare", async ({
+    page,
+  }) => {
+    await page.goto('/tasks')
+
+    const dialog = page.getByRole('dialog', { name: 'Update Task' })
+
+    await test.step('Apertura della modifica dalla riga della lista', async () => {
+      // tasks.list / row_menu_button (first row)
+      await page.getByRole('button', { name: 'Open menu' }).first().click()
+
+      // tasks.row_menu / menu_edit — opens a distinct dialog from Create, not reused.
+      await page.getByRole('menuitem', { name: 'Edit' }).click()
+      await expect(dialog).toBeVisible()
+    })
+
+    await test.step('Verifica della precompilazione con i dati della riga', async () => {
+      // tasks.edit_dialog / title_input, status_combobox, label_radiogroup, priority_radiogroup
+      // Not blank/placeholder, and not "Create Task" defaults — genuinely pre-filled.
+      await expect(dialog.getByRole('textbox', { name: 'Title' })).not.toHaveValue('')
+      await expect(dialog.getByRole('combobox', { name: 'Status' })).not.toHaveText('Select status')
+      await expect(dialog.getByRole('radiogroup').first().getByRole('radio', { checked: true })).toHaveCount(1)
+      await expect(dialog.getByRole('radiogroup').last().getByRole('radio', { checked: true })).toHaveCount(1)
+    })
+
+    await test.step('Chiusura della finestra senza salvare', async () => {
+      // tasks.edit_dialog / close_button
+      await dialog.getByRole('button', { name: 'Close' }).first().click()
+      await expect(dialog).toBeHidden()
+    })
+  })
+
   // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
   // No button is ever named this — produces "locator resolved to 0 elements" plus a
   // screenshot of the real page, a different failure shape than a wrong assertion.

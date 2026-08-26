@@ -1,0 +1,16 @@
+workflow: wf.sign_in_success
+summary: "Sign in with well-formed email + 7+ char password -> simulated login -> dashboard"
+preconditions: []
+steps:
+  - screen: auth.sign_in
+    action: { fill: { element: email_input, text: "test@example.com" } }
+  - screen: auth.sign_in
+    action: { fill: { element: password_input, text: "validpassword123" } }
+  - screen: auth.sign_in
+    action: { click: sign_in_button }
+    description: "Shows a 'Signing in...' toast; sign_in_button and the OAuth buttons disable briefly during the simulated async login."
+  - screen: dashboard.overview
+    assert: [tab_overview]
+covered_by:
+  - tests/tests/auth/auth.spec.ts#wf.sign_in_success
+known_issues: []

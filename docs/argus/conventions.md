@@ -3,8 +3,11 @@
 ## Platform
 
 - React + Vite SPA (TanStack Router), shadcn/ui (Radix primitives) + Tailwind.
-- All data is mock/local (faker-style generated tasks, users, chats). No real backend observed;
-  no destructive action (create/edit/delete submit, sign-out) was exercised during exploration.
+- All data is mock/local (faker-style generated tasks, users, chats). No real backend observed.
+  Row-level destructive actions (task/user create/edit/delete submit, sign-out) were not
+  exercised, to avoid mutating the mock table data. The 4 standalone auth forms (sign in, sign
+  up, forgot password, OTP) *were* submitted with both invalid and valid input — see
+  `features/auth.yaml` for what each does; none of it touches a real backend either.
 - The a11y tree is the source of truth. Most interactive elements have real ARIA roles/names via
   Radix; a minority of icon-only buttons carry no accessible name (see quirks below).
 
@@ -45,7 +48,8 @@ driving the app.
 - No auth/login was required to reach any authenticated screen — the app renders already
   "signed in" as a mock user (`satnaing`, avatar initials `SN`). The `/sign-in`, `/sign-up`,
   `/forgot-password`, `/otp` pages exist and render standalone (no sidebar/header) but nothing
-  gates the rest of the app behind them in this build.
+  gates the rest of the app behind them in this build. Sign in itself, when used, does work:
+  valid input navigates to dashboard.overview via a simulated async login (see auth.yaml).
 - A `Secured by Clerk` sidebar button is present but not wired to a visible auth requirement.
 
 ## Selector strategy, ordered

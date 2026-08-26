@@ -45,3 +45,13 @@ workflows:
     summary: "Sign in -> Forgot Password -> Sign Up -> Sign in, exercising every cross-link between the standalone auth pages"
   - id: wf.error_page_recovery
     summary: "401 error page -> Back to Home -> dashboard"
+  - id: wf.sign_in_success
+    summary: "Sign in with valid credentials -> simulated async login -> dashboard"
+  - id: wf.sign_in_empty_submit
+    summary: "Sign in with empty fields -> inline validation errors, no navigation"
+  - id: wf.forgot_password_to_otp
+    summary: "Forgot Password with a valid email -> OTP screen -> submit a 6-digit code"
+  - id: wf.edit_task_dialog
+    summary: "Tasks list -> row menu -> Edit -> pre-filled Update Task dialog -> close"
+  - id: wf.edit_user_dialog
+    summary: "Users list -> row menu -> Edit -> pre-filled Edit User dialog -> close"

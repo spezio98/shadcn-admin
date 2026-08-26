@@ -11,20 +11,21 @@ screens:
     known_issues: []
     elements:
       - id: email_input
-        role: "email address"
+        role: "email address; required, must be a well-formed address (client-side validation)"
         locators:
           web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
         stability: anchor
       - id: password_input
-        role: "password, with show/hide toggle"
+        role: "password, with show/hide toggle; required, at least 7 characters (client-side validation)"
         locators:
           web: { pattern: "getByRole('textbox', { name: 'Password' })", type: role }
         stability: anchor
       - id: sign_in_button
-        role: "submits the form; not exercised (no backend verified)"
+        role: "on valid input: shows a 'Signing in...' toast, briefly disables itself and the OAuth buttons, then navigates to dashboard.overview. No real backend: any well-formed email + 7+ char password succeeds."
         locators:
           web: { pattern: "getByRole('button', { name: 'Sign in' })", type: role }
         stability: anchor
+        quirks: "disabled for ~1-2s during the simulated sign-in; wait for navigation, not for re-enable"
       - id: forgot_password_link
         role: "navigates to Forgot Password"
         locators:
@@ -69,12 +70,12 @@ screens:
           web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
         stability: anchor
       - id: confirm_password_input
-        role: "must match Password; validation not exercised"
+        role: "must match Password, else shows 'Passwords don't match.'; unlike users.add_dialog's field, this one starts enabled, not disabled"
         locators:
           web: { pattern: "getByRole('textbox', { name: 'Confirm Password' })", type: role }
         stability: anchor
       - id: create_account_button
-        role: "submits the form; not exercised"
+        role: "on valid input (all fields required, passwords matching): no observable effect — no toast, no redirect, no error. Differs from sign_in/forgot_password/otp, which all do something visible on valid submit."
         locators:
           web: { pattern: "getByRole('button', { name: 'Create Account' })", type: role }
         stability: anchor
@@ -93,12 +94,12 @@ screens:
     known_issues: []
     elements:
       - id: email_input
-        role: "registered email"
+        role: "registered email; required, must be a well-formed address (client-side validation)"
         locators:
           web: { pattern: "getByRole('textbox', { name: 'Email' })", type: role }
         stability: anchor
       - id: continue_button
-        role: "submits the reset request; not exercised"
+        role: "on a valid email: shows an 'Email sent to <email>' toast and navigates to auth.otp. No real backend: any well-formed address succeeds, existence is not checked."
         locators:
           web: { pattern: "getByRole('button', { name: 'Continue' })", type: role }
         stability: anchor
@@ -124,7 +125,7 @@ screens:
           web: { pattern: "getByRole('textbox', { name: 'One-Time Password' })", type: role }
         stability: anchor
       - id: verify_button
-        role: "submits the code; starts disabled, unknown whether/when it enables (see gaps)"
+        role: "starts disabled; enables once all 6 digits are entered (partial codes keep it disabled). On click: shows a toast echoing the submitted code as JSON, then re-disables. No real backend: any 6-digit code is accepted."
         locators:
           web: { pattern: "getByRole('button', { name: 'Verify' })", type: role }
         stability: anchor
@@ -136,6 +137,20 @@ screens:
         quirks: "labeled as a resend action but its href is /sign-in, not an in-place resend"
 
 transitions:
+  - from: auth.sign_in
+    to: dashboard.overview
+    trigger: { action: click, element: sign_in_button }
+    guards: []
+    description: "Only on valid input (well-formed email + 7+ char password); invalid input shows inline errors and stays on auth.sign_in."
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.sign_in_success
+  - from: auth.forgot_password
+    to: auth.otp
+    trigger: { action: click, element: continue_button }
+    guards: []
+    description: "Only on a valid (well-formed) email; invalid input shows an inline error and stays on auth.forgot_password."
+    covered_by:
+      - tests/tests/auth/auth.spec.ts#wf.forgot_password_to_otp
   - from: auth.sign_in
     to: auth.sign_up
     trigger: { action: click, element: sign_up_link }
