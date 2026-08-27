@@ -1,0 +1,49 @@
+version: "3"
+
+tasks:
+  # Run the CI workflow (lint, format check, tests, build) locally via act.
+  # No push, no PR, no history noise — same workflow_dispatch trigger GitHub uses.
+  act-ci:
+    cmds:
+      - |
+        act workflow_dispatch \
+          --container-architecture linux/amd64 \
+          -P ubuntu-latest=catthehacker/ubuntu:act-latest \
+          -W '.github/workflows/ci.yml'
+
+  # Run the Playwright E2E business report workflow locally via act.
+  # The job intentionally fails on the demo's flaky/broken tests, so the act
+  # command is allowed to fail — extraction below still runs and reports
+  # whether the container/report were actually found.
+  act-e2e-report:
+    cmds:
+      - task: act-e2e-report-run
+        ignore_error: true
+      - task: act-e2e-report-extract
+
+  act-e2e-report-run:
+    internal: true
+    cmds:
+      - |
+        act workflow_dispatch \
+          --container-architecture linux/amd64 \
+          -P ubuntu-latest=catthehacker/ubuntu:act-latest \
+          -W '.github/workflows/e2e-report.yml'
+
+  # act's checkout copies the repo into the container at the same absolute
+  # path as the host, but as a plain container-layer file — not a bind mount.
+  # It's gone once the container is removed, so pull it out with `docker cp`
+  # before that happens.
+  act-e2e-report-extract:
+    internal: true
+    cmds:
+      - |
+        CID=$(docker ps -a --filter "name=act-E2E-business-report" -q | head -1)
+        if [ -z "$CID" ]; then
+          echo "No act container found — run may not have started." >&2
+          exit 1
+        fi
+        WORKDIR="$(pwd)"
+        docker cp "$CID:$WORKDIR/report-business.html" ./report-business.html
+        docker cp "$CID:$WORKDIR/run.json" ./run.json
+        echo "Report estratto: $WORKDIR/report-business.html"
