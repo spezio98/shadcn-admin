@@ -100,6 +100,14 @@ Start the server
   pnpm run dev
 ```
 
+## E2E Tests & Reports
+
+E2E tests (Playwright) run via the `E2E business report` GitHub Actions workflow (manual trigger, or `task act-e2e-report` to run it locally with [act](https://github.com/nektos/act) — see `Taskfile.yaml`). Each run uploads three artifacts:
+
+- **`report-business`** — `report-business.html`, self-contained (screenshots/videos inlined), open directly in a browser
+- **`playwright-report`** — Playwright's own HTML report, needs a local server: `npx playwright show-report <unzipped-folder>`
+- **`allure-report`** — [Allure](https://allurereport.org/) report, also needs a local server (opening `index.html` directly gives an infinite loader — its data loads via `fetch`, which browsers block on `file://`): `npx allure open <unzipped-folder>`
+
 ## Sponsoring this project ❤️
 
 If you find this project helpful or use this in your own work, consider [sponsoring me](https://github.com/sponsors/satnaing) to support development and maintenance. You can [buy me a coffee](https://buymeacoffee.com/satnaing) as well. Don’t worry, every penny helps. Thank you! 🙏
