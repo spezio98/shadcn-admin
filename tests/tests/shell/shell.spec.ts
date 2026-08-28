@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('shell', { tag: '@shell' }, () => {
-  test("wf.command_palette_navigate: L'utente cerca \"task\" nella ricerca rapida e naviga alla lista Attività", async ({
+  test("wf.command_palette_navigate: The user searches for \"task\" in quick search and navigates to the tasks list", async ({
     page,
   }) => {
     await page.goto('/')
 
     const query = page.getByRole('combobox')
 
-    await test.step('Apertura della ricerca rapida dall\'header', async () => {
+    await test.step('Opening quick search from the header', async () => {
       // shell.header / search_button
       await page.getByRole('button', { name: 'Search' }).click()
 
@@ -16,7 +16,7 @@ test.describe('shell', { tag: '@shell' }, () => {
       await expect(query).toBeVisible()
     })
 
-    await test.step('Ricerca di "task" e navigazione alla lista Attività', async () => {
+    await test.step('Searching for "task" and navigating to the tasks list', async () => {
       await query.fill('task')
       await page.keyboard.press('Enter')
 
@@ -26,14 +26,14 @@ test.describe('shell', { tag: '@shell' }, () => {
     })
   })
 
-  test("wf.customize_theme: L'utente apre le impostazioni tema, verifica le opzioni disponibili e le chiude", async ({
+  test("wf.customize_theme: The user opens theme settings, checks the available options, and closes it", async ({
     page,
   }) => {
     await page.goto('/')
 
     const dialog = page.getByRole('dialog', { name: 'Theme Settings' })
 
-    await test.step('Apertura della finestra Impostazioni Tema', async () => {
+    await test.step('Opening the Theme Settings dialog', async () => {
       // shell.header / theme_settings_button
       await page.getByRole('button', { name: 'Open theme settings' }).click()
 
@@ -45,7 +45,7 @@ test.describe('shell', { tag: '@shell' }, () => {
       await expect(dialog.getByRole('radiogroup', { name: 'Select site direction' })).toBeVisible()
     })
 
-    await test.step("Chiusura della finestra e ritorno all'header", async () => {
+    await test.step("Closing the dialog and returning to the header", async () => {
       // shell.theme_settings_dialog / close_button
       await dialog.getByRole('button', { name: 'Close' }).click()
 

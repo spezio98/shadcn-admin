@@ -1,0 +1,10 @@
+{
+  "auth": "Authentication",
+  "chats": "Messaging",
+  "dashboard": "Dashboard",
+  "errors": "Error pages",
+  "shell": "Navigation",
+  "tasks": "Tasks",
+  "users": "Users",
+  "other": "Other"
+}

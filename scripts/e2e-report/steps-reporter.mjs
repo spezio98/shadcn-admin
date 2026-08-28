@@ -3,10 +3,11 @@ import { writeFileSync } from "node:fs";
 import { relative, isAbsolute } from "node:path";
 
 /**
- * Unico compito: serializzare result.steps, che il reporter JSON non garantisce.
- * Nessuna normalizzazione, nessuna classificazione, nessuna etichetta: tutta la
- * logica sta in extract.mjs, dove e testabile contro le fixture senza far girare
- * Playwright. Se questo file inizia a prendere decisioni, e nel posto sbagliato.
+ * Single job: serialize result.steps, which the JSON reporter doesn't
+ * guarantee. No normalization, no classification, no labeling: all that
+ * logic lives in extract.mjs, where it's testable against fixtures without
+ * running Playwright. If this file starts making decisions, it's in the
+ * wrong place.
  *
  * playwright.config.ts:
  *   reporter: [
@@ -15,7 +16,7 @@ import { relative, isAbsolute } from "node:path";
  *     ["html", { open: "never" }],
  *   ]
  *
- * La chiave e lo stesso hash calcolato da extract.mjs: file + titlePath + progetto.
+ * The key is the same hash computed by extract.mjs: file + titlePath + project.
  */
 export default class StepsReporter {
   constructor(options = {}) {
@@ -26,8 +27,8 @@ export default class StepsReporter {
   onTestEnd(test, result) {
     if (result.status === "passed" && result.retry === 0) return;
 
-    // Il reporter JSON (extract.mjs) riceve i path delle spec relativi a testDir,
-    // non alla cwd: replicare qui la stessa base o gli id non combaciano mai.
+    // The JSON reporter (extract.mjs) receives spec paths relative to testDir,
+    // not to cwd: replicate the same base here or the ids will never match.
     const testProject = test.parent?.project?.();
     const testDir = testProject?.testDir;
     const absFile = test.location.file;

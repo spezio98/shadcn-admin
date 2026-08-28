@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('dashboard', { tag: '@dashboard' }, () => {
-  test("wf.dashboard_analytics: L'utente passa dalla Panoramica alla scheda Analisi e vede il grafico del traffico", async ({
+  test("wf.dashboard_analytics: The user switches from Overview to the Analytics tab and sees the traffic chart", async ({
     page,
   }) => {
     await page.goto('/')
 
-    await test.step('Verifica che la scheda Panoramica sia disponibile', async () => {
+    await test.step('Checking that the Overview tab is available', async () => {
       // dashboard.overview / tab_overview
       await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
     })
 
-    await test.step('Apertura della scheda Analisi e verifica del grafico del traffico', async () => {
+    await test.step('Opening the Analytics tab and checking the traffic chart', async () => {
       // dashboard.overview / tab_analytics
       await page.getByRole('tab', { name: 'Analytics' }).click()
 
@@ -20,20 +20,20 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
     })
   })
 
-  test("wf.dashboard_analytics: flaky demo — il grafico del traffico non viene visto in tempo al primo tentativo", async ({
+  test("wf.dashboard_analytics: flaky demo — the traffic chart isn't seen in time on the first attempt", async ({
     page,
   }, testInfo) => {
     await page.goto('/')
 
-    await test.step('Apertura della scheda Analisi', async () => {
+    await test.step('Opening the Analytics tab', async () => {
       // dashboard.overview / tab_analytics
       await page.getByRole('tab', { name: 'Analytics' }).click()
     })
 
-    await test.step('Verifica (instabile) del grafico del traffico', async () => {
+    await test.step('(Flaky) check of the traffic chart', async () => {
       // dashboard.analytics / traffic_chart — same real workflow (wf.dashboard_analytics) as
       // the test above; this variant fails on the first attempt and passes on retry, on
-      // purpose, to populate the report's "flaky" / "Da monitorare" category deterministically
+      // purpose, to populate the report's "flaky" / "To keep an eye on" category deterministically
       // (testInfo.retry, not chance) rather than leaving it to a real, rare race condition.
       if (testInfo.retry === 0) {
         await expect(page.getByText('Traffic Overview')).toBeHidden({ timeout: 500 })
@@ -43,12 +43,12 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
     })
   })
 
-  test('Le schede Report e Notifiche risultano disabilitate (problema noto)', async ({
+  test('The Reports and Notifications tabs are disabled (known issue)', async ({
     page,
   }) => {
     await page.goto('/')
 
-    await test.step('Verifica che le schede Report e Notifiche siano disabilitate', async () => {
+    await test.step('Checking that the Reports and Notifications tabs are disabled', async () => {
       await expect(page.getByRole('tab', { name: 'Reports' })).toBeDisabled()
       await expect(page.getByRole('tab', { name: 'Notifications' })).toBeDisabled()
     })

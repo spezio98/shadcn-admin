@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('errors', { tag: '@errors' }, () => {
-  test("wf.error_page_recovery: L'utente vede la pagina di errore 401 e torna alla dashboard", async ({ page }) => {
+  test("wf.error_page_recovery: The user sees the 401 error page and returns to the dashboard", async ({ page }) => {
     await page.goto('/errors/unauthorized')
 
-    await test.step('Visualizzazione della pagina di errore 401', async () => {
+    await test.step('Viewing the 401 error page', async () => {
       // errors.unauthorized
       await expect(page.getByRole('heading', { name: '401' })).toBeVisible()
     })
 
-    await test.step("Ritorno alla dashboard tramite \"Back to Home\"", async () => {
+    await test.step("Returning to the dashboard via \"Back to Home\"", async () => {
       // errors.unauthorized / back_to_home_button
       await page.getByRole('button', { name: 'Back to Home' }).click()
 

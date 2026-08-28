@@ -6,8 +6,8 @@ try {
   Ajv = (await import("ajv/dist/2020.js")).default;
   addFormats = (await import("ajv-formats")).default;
 } catch {
-  console.error("Manca una dipendenza. Installa con:\n\n  npm i -D ajv ajv-formats\n");
-  console.error("Sono richieste solo da questo validatore: extract.mjs e render.mjs girano con Node puro.");
+  console.error("Missing dependency. Install with:\n\n  npm i -D ajv ajv-formats\n");
+  console.error("Only this validator needs them: extract.mjs and render.mjs run on plain Node.");
   process.exit(2);
 }
 
@@ -36,44 +36,44 @@ function validateStats({ stats, tests }) {
 
   check(
     total === passed + failed + flaky + skipped,
-    `stats: total (${total}) non corrisponde alla somma degli stati (${passed + failed + flaky + skipped}). I flaky non vanno contati tra i passati.`
+    `stats: total (${total}) doesn't match the sum of statuses (${passed + failed + flaky + skipped}). Flaky tests must not be counted as passed.`
   );
-  check(total === tests.length, `stats.total (${total}) diverso dal numero di test (${tests.length}).`);
+  check(total === tests.length, `stats.total (${total}) differs from the number of tests (${tests.length}).`);
 
   for (const status of ["passed", "failed", "flaky", "skipped"]) {
     const actual = tests.filter((t) => t.status === status).length;
-    check(stats[status] === actual, `stats.${status} (${stats[status]}) diverso dai test con quello stato (${actual}).`);
+    check(stats[status] === actual, `stats.${status} (${stats[status]}) differs from tests with that status (${actual}).`);
   }
 
   const denominator = total - skipped;
   const expected = denominator === 0 ? 100 : Math.round((passed / denominator) * 1000) / 10;
-  check(passRate === expected, `stats.passRate (${passRate}) diverso dal valore calcolato (${expected}).`);
+  check(passRate === expected, `stats.passRate (${passRate}) differs from the computed value (${expected}).`);
 }
 
 function validateAreas({ areas, stats, tests }) {
   const ids = areas.map((a) => a.id);
-  check(new Set(ids).size === ids.length, "areas: id duplicati.");
+  check(new Set(ids).size === ids.length, "areas: duplicate ids.");
 
   const sum = (key) => areas.reduce((acc, a) => acc + a[key], 0);
   for (const key of ["total", "passed", "failed", "flaky", "skipped"]) {
-    check(sum(key) === stats[key], `areas: somma di ${key} (${sum(key)}) diversa da stats.${key} (${stats[key]}).`);
+    check(sum(key) === stats[key], `areas: sum of ${key} (${sum(key)}) differs from stats.${key} (${stats[key]}).`);
   }
 
   for (const area of areas) {
     const own = tests.filter((t) => t.area === area.id);
-    check(area.total === own.length, `area "${area.id}": total (${area.total}) diverso dai test dell'area (${own.length}).`);
+    check(area.total === own.length, `area "${area.id}": total (${area.total}) differs from the area's tests (${own.length}).`);
 
     for (const status of ["passed", "failed", "flaky", "skipped"]) {
       const actual = own.filter((t) => t.status === status).length;
-      check(area[status] === actual, `area "${area.id}": ${status} (${area[status]}) diverso dai test con quello stato (${actual}).`);
+      check(area[status] === actual, `area "${area.id}": ${status} (${area[status]}) differs from tests with that status (${actual}).`);
     }
 
     const expected = area.failed > 0 ? "broken" : area.flaky > 0 ? "degraded" : "ok";
-    check(area.status === expected, `area "${area.id}": status "${area.status}" incoerente con i conteggi (atteso "${expected}").`);
+    check(area.status === expected, `area "${area.id}": status "${area.status}" inconsistent with the counts (expected "${expected}").`);
   }
 
   for (const test of tests) {
-    check(ids.includes(test.area), `test "${test.id}": area "${test.area}" non presente in areas[].`);
+    check(ids.includes(test.area), `test "${test.id}": area "${test.area}" not present in areas[].`);
   }
 }
 
@@ -83,53 +83,53 @@ function validateTests({ tests }) {
   for (const test of tests) {
     const where = `test "${test.id}" (${test.title})`;
 
-    check(!seen.has(test.id), `${where}: id duplicato.`);
+    check(!seen.has(test.id), `${where}: duplicate id.`);
     seen.add(test.id);
 
     if (test.status === "passed" || test.status === "skipped") {
-      check(test.error === null, `${where}: un test ${test.status} non deve avere un error.`);
-      check(test.steps === null, `${where}: gli steps sono popolati solo per failed e flaky.`);
-      check(test.failedStepIndex === null, `${where}: failedStepIndex deve essere null.`);
+      check(test.error === null, `${where}: a ${test.status} test must not have an error.`);
+      check(test.steps === null, `${where}: steps are only populated for failed and flaky.`);
+      check(test.failedStepIndex === null, `${where}: failedStepIndex must be null.`);
     }
 
     if (test.status === "failed" || test.status === "flaky") {
-      check(test.error !== null, `${where}: un test ${test.status} deve avere un error.`);
-      check(test.skipReason === null, `${where}: skipReason va valorizzato solo per gli skipped.`);
+      check(test.error !== null, `${where}: a ${test.status} test must have an error.`);
+      check(test.skipReason === null, `${where}: skipReason should only be set for skipped.`);
     }
 
     if (test.status === "skipped") {
-      check(test.skipReason !== null, `${where}: uno skipped deve dichiarare skipReason.`);
-      check(test.durationMs === 0, `${where}: uno skipped ha durata 0.`);
+      check(test.skipReason !== null, `${where}: a skipped test must declare skipReason.`);
+      check(test.durationMs === 0, `${where}: a skipped test has duration 0.`);
     }
 
     if (test.status === "flaky") {
-      check(test.attempts >= 2, `${where}: un flaky ha almeno 2 tentativi, trovati ${test.attempts}.`);
+      check(test.attempts >= 2, `${where}: a flaky test has at least 2 attempts, found ${test.attempts}.`);
       check(
         test.attachments.screenshot !== null || test.attachments.video !== null,
-        `${where}: un flaky senza allegati non e utile. Verifica che l'extractor prenda quelli del tentativo fallito, non dell'ultimo.`
+        `${where}: a flaky test without attachments isn't useful. Check that the extractor picks the failed attempt's attachments, not the last one's.`
       );
     }
 
     if (test.steps === null) {
-      check(test.failedStepIndex === null, `${where}: failedStepIndex valorizzato ma steps e null.`);
+      check(test.failedStepIndex === null, `${where}: failedStepIndex is set but steps is null.`);
     } else {
-      check(test.steps.length > 0, `${where}: steps e un array vuoto; usa null quando non ci sono step.`);
+      check(test.steps.length > 0, `${where}: steps is an empty array; use null when there are no steps.`);
       test.steps.forEach((step, i) => {
-        check(step.index === i, `${where}: step in posizione ${i} dichiara index ${step.index}.`);
+        check(step.index === i, `${where}: step at position ${i} declares index ${step.index}.`);
       });
 
       const failedSteps = test.steps.filter((s) => s.status === "failed");
-      check(failedSteps.length <= 1, `${where}: piu di uno step fallito (${failedSteps.length}).`);
+      check(failedSteps.length <= 1, `${where}: more than one failed step (${failedSteps.length}).`);
 
       if (test.failedStepIndex !== null) {
         const step = test.steps[test.failedStepIndex];
-        check(step !== undefined, `${where}: failedStepIndex ${test.failedStepIndex} fuori dai limiti di steps.`);
+        check(step !== undefined, `${where}: failedStepIndex ${test.failedStepIndex} is out of bounds for steps.`);
         check(
           step === undefined || step.status === "failed",
-          `${where}: lo step indicato da failedStepIndex non ha status "failed".`
+          `${where}: the step referenced by failedStepIndex doesn't have status "failed".`
         );
       } else {
-        check(failedSteps.length === 0, `${where}: c'e uno step fallito ma failedStepIndex e null.`);
+        check(failedSteps.length === 0, `${where}: there is a failed step but failedStepIndex is null.`);
       }
     }
 
@@ -137,12 +137,12 @@ function validateTests({ tests }) {
       if (test.error.category === "unknown") {
         check(
           test.error.human === null,
-          `${where}: con category "unknown" human deve essere null. Una frase generica e peggio del messaggio grezzo.`
+          `${where}: with category "unknown", human must be null. A generic sentence is worse than the raw message.`
         );
       }
       check(
         !/\u001b\[/.test(test.error.raw),
-        `${where}: error.raw contiene codici di escape ANSI, vanno rimossi dall'extractor.`
+        `${where}: error.raw contains ANSI escape codes, the extractor must strip them.`
       );
     }
   }
@@ -154,11 +154,11 @@ function validateOrdering({ areas, tests }) {
   const areasSorted = [...areas].sort((x, y) => {
     const [rx, lx] = areaKey(x);
     const [ry, ly] = areaKey(y);
-    return rx - ry || lx.localeCompare(ly, "it");
+    return rx - ry || lx.localeCompare(ly, "en");
   });
   check(
     areas.every((a, i) => a.id === areasSorted[i].id),
-    "areas: ordine errato. Atteso broken, degraded, ok; a parita di stato per label."
+    "areas: wrong order. Expected broken, degraded, ok; ties broken by label."
   );
 
   const labelById = Object.fromEntries(areas.map((a) => [a.id, a.label]));
@@ -166,31 +166,31 @@ function validateOrdering({ areas, tests }) {
   const testsSorted = [...tests].sort(
     (x, y) =>
       testRank[x.status] - testRank[y.status] ||
-      labelById[x.area].localeCompare(labelById[y.area], "it") ||
-      x.title.localeCompare(y.title, "it")
+      labelById[x.area].localeCompare(labelById[y.area], "en") ||
+      x.title.localeCompare(y.title, "en")
   );
   check(
     tests.every((t, i) => t.id === testsSorted[i].id),
-    "tests: ordine errato. Atteso failed, flaky, skipped, passed; a parita di stato per area e poi per titolo."
+    "tests: wrong order. Expected failed, flaky, skipped, passed; ties broken by area then by title."
   );
 }
 
 function validateRun({ run }) {
   const elapsed = Date.parse(run.finishedAt) - Date.parse(run.startedAt);
-  check(elapsed >= 0, "run: finishedAt precede startedAt.");
+  check(elapsed >= 0, "run: finishedAt precedes startedAt.");
   check(
     Math.abs(elapsed - run.durationMs) <= 2000,
-    `run: durationMs (${run.durationMs}) non coerente con l'intervallo startedAt/finishedAt (${elapsed}).`
+    `run: durationMs (${run.durationMs}) inconsistent with the startedAt/finishedAt interval (${elapsed}).`
   );
   check(
     run.commit.sha.startsWith(run.commit.shortSha),
-    "run: shortSha non e un prefisso di sha."
+    "run: shortSha is not a prefix of sha."
   );
 }
 
 const files = process.argv.slice(2);
 if (files.length === 0) {
-  console.error("Uso: node validate.mjs <run.json> [altri.json...]");
+  console.error("Usage: node validate.mjs <run.json> [other.json...]");
   process.exit(2);
 }
 

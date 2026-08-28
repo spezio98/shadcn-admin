@@ -10,7 +10,7 @@
       "label": "Staging",
       "isProduction": false
     },
-    "suiteLabel": "Tutti i test",
+    "suiteLabel": "All tests",
     "triggeredBy": "m.bianchi",
     "startedAt": "2026-08-25T12:32:00.000Z",
     "finishedAt": "2026-08-25T12:38:12.000Z",
@@ -20,7 +20,7 @@
       "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
       "shortSha": "a1b2c3d",
       "branch": "main",
-      "message": "Fix validazione email in registrazione"
+      "message": "Fix email validation in registration"
     }
   },
   "stats": {
@@ -34,8 +34,8 @@
   },
   "areas": [
     {
-      "id": "altro",
-      "label": "Altro",
+      "id": "other",
+      "label": "Other",
       "total": 1,
       "passed": 0,
       "failed": 1,
@@ -64,8 +64,8 @@
       "status": "degraded"
     },
     {
-      "id": "fatturazione",
-      "label": "Fatturazione",
+      "id": "billing",
+      "label": "Billing",
       "total": 3,
       "passed": 2,
       "failed": 0,
@@ -77,9 +77,9 @@
   "tests": [
     {
       "id": "98c9a004",
-      "title": "La pagina di stato del servizio e raggiungibile",
-      "file": "tests/monitoraggio/stato.spec.ts",
-      "area": "altro",
+      "title": "The service status page is reachable",
+      "file": "tests/monitoring/status.spec.ts",
+      "area": "other",
       "status": "failed",
       "durationMs": 340,
       "attempts": 1,
@@ -89,9 +89,9 @@
       "error": {
         "category": "unknown",
         "human": null,
-        "raw": "Error: Cannot find module '../helpers/stato-client' imported from tests/monitoraggio/stato.spec.ts",
+        "raw": "Error: Cannot find module '../helpers/status-client' imported from tests/monitoring/status.spec.ts",
         "location": {
-          "file": "tests/monitoraggio/stato.spec.ts",
+          "file": "tests/monitoring/status.spec.ts",
           "line": 3
         }
       },
@@ -103,8 +103,8 @@
     },
     {
       "id": "c38dc8e5",
-      "title": "Il cliente invita un collega nel proprio spazio di lavoro",
-      "file": "tests/onboarding/invito.spec.ts",
+      "title": "The customer invites a colleague to their workspace",
+      "file": "tests/onboarding/invite.spec.ts",
       "area": "onboarding",
       "status": "failed",
       "durationMs": 12800,
@@ -113,7 +113,7 @@
       "steps": [
         {
           "index": 0,
-          "title": "Preparazione del test",
+          "title": "Test setup",
           "status": "failed",
           "durationMs": 12400
         }
@@ -121,7 +121,7 @@
       "failedStepIndex": 0,
       "error": {
         "category": "network",
-        "human": "Il server ha risposto con un errore durante il test.",
+        "human": "The server responded with an error during the test.",
         "raw": "Error: apiRequest.post: 503 Service Unavailable at https://staging.acme.internal/api/v2/workspaces",
         "location": {
           "file": "tests/onboarding/fixtures.ts",
@@ -130,14 +130,14 @@
       },
       "attachments": {
         "screenshot": null,
-        "video": "test-results/onboarding-invito-chromium-retry1/video.webm",
-        "trace": "test-results/onboarding-invito-chromium-retry1/trace.zip"
+        "video": "test-results/onboarding-invite-chromium-retry1/video.webm",
+        "trace": "test-results/onboarding-invite-chromium-retry1/trace.zip"
       }
     },
     {
       "id": "300f88f1",
-      "title": "Il nuovo cliente completa la registrazione con email aziendale",
-      "file": "tests/onboarding/registrazione.spec.ts",
+      "title": "The new customer completes registration with a work email",
+      "file": "tests/onboarding/registration.spec.ts",
       "area": "onboarding",
       "status": "failed",
       "durationMs": 62480,
@@ -146,31 +146,31 @@
       "steps": [
         {
           "index": 0,
-          "title": "Apertura della pagina di registrazione",
+          "title": "Opening the registration page",
           "status": "passed",
           "durationMs": 1200
         },
         {
           "index": 1,
-          "title": "Inserimento dei dati anagrafici",
+          "title": "Entering personal details",
           "status": "passed",
           "durationMs": 2400
         },
         {
           "index": 2,
-          "title": "Inserimento email aziendale",
+          "title": "Entering work email",
           "status": "passed",
           "durationMs": 800
         },
         {
           "index": 3,
-          "title": "Invio del modulo",
+          "title": "Submitting the form",
           "status": "passed",
           "durationMs": 1500
         },
         {
           "index": 4,
-          "title": "Conferma del codice via email",
+          "title": "Confirming the code via email",
           "status": "failed",
           "durationMs": 30000
         }
@@ -178,23 +178,23 @@
       "failedStepIndex": 4,
       "error": {
         "category": "timeout",
-        "human": "La pagina non ha risposto entro 30 secondi.",
-        "raw": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Conferma codice' })",
+        "human": "The page did not respond within 30 seconds.",
+        "raw": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Confirm code' })",
         "location": {
-          "file": "tests/onboarding/registrazione.spec.ts",
+          "file": "tests/onboarding/registration.spec.ts",
           "line": 47
         }
       },
       "attachments": {
-        "screenshot": "test-results/onboarding-registrazione-chromium-retry1/test-failed-1.png",
-        "video": "test-results/onboarding-registrazione-chromium-retry1/video.webm",
-        "trace": "test-results/onboarding-registrazione-chromium-retry1/trace.zip"
+        "screenshot": "test-results/onboarding-registration-chromium-retry1/test-failed-1.png",
+        "video": "test-results/onboarding-registration-chromium-retry1/video.webm",
+        "trace": "test-results/onboarding-registration-chromium-retry1/trace.zip"
       }
     },
     {
       "id": "66e0aec5",
-      "title": "Il cliente completa un acquisto con carta di credito",
-      "file": "tests/checkout/acquisto.spec.ts",
+      "title": "The customer completes a purchase with a credit card",
+      "file": "tests/checkout/purchase.spec.ts",
       "area": "checkout",
       "status": "flaky",
       "durationMs": 58200,
@@ -203,25 +203,25 @@
       "steps": [
         {
           "index": 0,
-          "title": "Apertura della scheda prodotto",
+          "title": "Opening the product page",
           "status": "passed",
           "durationMs": 1800
         },
         {
           "index": 1,
-          "title": "Aggiunta al carrello",
+          "title": "Adding to cart",
           "status": "passed",
           "durationMs": 1100
         },
         {
           "index": 2,
-          "title": "Apertura del riepilogo ordine",
+          "title": "Opening the order summary",
           "status": "passed",
           "durationMs": 900
         },
         {
           "index": 3,
-          "title": "Inserimento dati carta",
+          "title": "Entering card details",
           "status": "failed",
           "durationMs": 15200
         }
@@ -229,28 +229,28 @@
       "failedStepIndex": 3,
       "error": {
         "category": "elementNotFound",
-        "human": "Un elemento atteso non e comparso sulla pagina.",
+        "human": "An expected element did not appear on the page.",
         "raw": "Error: locator.fill: Element is not attached to the DOM\nCall log:\n  - waiting for getByLabel('CVV')",
         "location": {
-          "file": "tests/checkout/acquisto.spec.ts",
+          "file": "tests/checkout/purchase.spec.ts",
           "line": 88
         }
       },
       "attachments": {
-        "screenshot": "test-results/checkout-acquisto-chromium/test-failed-1.png",
-        "video": "test-results/checkout-acquisto-chromium/video.webm",
-        "trace": "test-results/checkout-acquisto-chromium/trace.zip"
+        "screenshot": "test-results/checkout-purchase-chromium/test-failed-1.png",
+        "video": "test-results/checkout-purchase-chromium/video.webm",
+        "trace": "test-results/checkout-purchase-chromium/trace.zip"
       }
     },
     {
       "id": "8fee513e",
-      "title": "L'amministratore puo scaricare il registro delle fatture del mese",
-      "file": "tests/fatturazione/registro.spec.ts",
-      "area": "fatturazione",
+      "title": "The administrator can download the monthly invoice register",
+      "file": "tests/billing/register.spec.ts",
+      "area": "billing",
       "status": "skipped",
       "durationMs": 0,
       "attempts": 1,
-      "skipReason": "Disponibile solo dal terzo giorno del mese",
+      "skipReason": "Only available from the third day of the month",
       "steps": null,
       "failedStepIndex": null,
       "error": null,
@@ -262,8 +262,8 @@
     },
     {
       "id": "fa3bebde",
-      "title": "Il cliente puo svuotare il carrello prima di pagare",
-      "file": "tests/checkout/carrello.spec.ts",
+      "title": "The customer can empty the cart before paying",
+      "file": "tests/checkout/cart.spec.ts",
       "area": "checkout",
       "status": "passed",
       "durationMs": 18400,
@@ -280,8 +280,8 @@
     },
     {
       "id": "0b24a031",
-      "title": "Il cliente riceve l'email di conferma ordine",
-      "file": "tests/checkout/conferma.spec.ts",
+      "title": "The customer receives the order confirmation email",
+      "file": "tests/checkout/confirmation.spec.ts",
       "area": "checkout",
       "status": "passed",
       "durationMs": 26700,
@@ -298,9 +298,9 @@
     },
     {
       "id": "0478e8f7",
-      "title": "La fattura viene generata in PDF dopo il pagamento",
-      "file": "tests/fatturazione/emissione.spec.ts",
-      "area": "fatturazione",
+      "title": "The invoice is generated as a PDF after payment",
+      "file": "tests/billing/issuance.spec.ts",
+      "area": "billing",
       "status": "passed",
       "durationMs": 51900,
       "attempts": 1,
@@ -316,9 +316,9 @@
     },
     {
       "id": "1cd3ef2b",
-      "title": "Una nota di credito annulla la fattura collegata",
-      "file": "tests/fatturazione/nota-credito.spec.ts",
-      "area": "fatturazione",
+      "title": "A credit note cancels the linked invoice",
+      "file": "tests/billing/credit-note.spec.ts",
+      "area": "billing",
       "status": "passed",
       "durationMs": 44300,
       "attempts": 1,
@@ -334,8 +334,8 @@
     },
     {
       "id": "d65569ad",
-      "title": "Il cliente aggiorna i dati di fatturazione dal profilo",
-      "file": "tests/onboarding/profilo.spec.ts",
+      "title": "The customer updates their billing details from the profile",
+      "file": "tests/onboarding/profile.spec.ts",
       "area": "onboarding",
       "status": "passed",
       "durationMs": 22900,

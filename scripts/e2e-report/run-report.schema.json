@@ -1,15 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.internal/run-report.schema.json",
-  "title": "Report di esecuzione Playwright — formato intermedio",
-  "description": "Formato prodotto da extract.mjs a partire dal reporter JSON di Playwright, e consumato da render.mjs (HTML), dal job summary e dalla issue automatica. Tre regole: il consumatore non calcola nulla, non interpreta nulla, e non trova mai byte binari qui dentro (solo percorsi).",
+  "title": "Playwright run report — intermediate format",
+  "description": "Format produced by extract.mjs from Playwright's JSON reporter, and consumed by render.mjs (HTML), the job summary, and the automated issue. Three rules: the consumer computes nothing, interprets nothing, and never finds binary bytes in here (paths only).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "run", "stats", "areas", "tests"],
   "properties": {
     "schemaVersion": {
       "const": 1,
-      "description": "Il consumatore verifica questo valore e si ferma con un messaggio esplicito se non lo riconosce."
+      "description": "The consumer checks this value and stops with an explicit message if it doesn't recognize it."
     },
     "run": { "$ref": "#/$defs/run" },
     "stats": { "$ref": "#/$defs/stats" },
@@ -17,12 +17,12 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/area" },
-      "description": "Gia ordinato dall'extractor: broken, poi degraded, poi ok; a parita di stato in ordine alfabetico per label."
+      "description": "Already sorted by the extractor: broken, then degraded, then ok; ties broken alphabetically by label."
     },
     "tests": {
       "type": "array",
       "items": { "$ref": "#/$defs/test" },
-      "description": "Gia ordinato dall'extractor: failed, flaky, skipped, passed; a parita di stato per area e poi per titolo."
+      "description": "Already sorted by the extractor: failed, flaky, skipped, passed; ties broken by area then by title."
     }
   },
 
@@ -45,12 +45,12 @@
         "triggeredBy", "startedAt", "finishedAt", "durationMs", "timezone", "commit"
       ],
       "properties": {
-        "id": { "type": "string", "minLength": 1, "description": "Id del run GitHub Actions." },
-        "attempt": { "type": "integer", "minimum": 1, "description": "I re-run di GitHub incrementano questo, non l'id." },
+        "id": { "type": "string", "minLength": 1, "description": "GitHub Actions run id." },
+        "attempt": { "type": "integer", "minimum": 1, "description": "GitHub re-runs increment this, not the id." },
         "url": { "type": "string", "format": "uri" },
         "status": {
           "enum": ["completed", "interrupted", "timedOut"],
-          "description": "Se non e completed le statistiche sono parziali e la pagina deve dichiararlo in cima."
+          "description": "When not completed, stats are partial and the page must say so at the top."
         },
         "environment": {
           "type": "object",
@@ -61,14 +61,14 @@
             "label": { "type": "string", "minLength": 1 },
             "isProduction": {
               "type": "boolean",
-              "description": "Booleano dedicato, mai un confronto con la stringa 'prod' fatto dal renderer. E la protezione contro la segnalazione di un bug di staging come se fosse produzione."
+              "description": "Dedicated boolean, never a string comparison against 'prod' done by the renderer. This is the safeguard against reporting a staging bug as if it were production."
             }
           }
         },
         "suiteLabel": {
           "type": "string",
           "minLength": 1,
-          "description": "Cosa e stato scelto nel dropdown del workflow. Senza questo il lettore crede che il run copra tutto il sistema."
+          "description": "What was chosen in the workflow's dropdown. Without this the reader assumes the run covers the whole system."
         },
         "triggeredBy": { "type": "string", "minLength": 1 },
         "startedAt": { "$ref": "#/$defs/isoDateTime" },
@@ -77,7 +77,7 @@
         "timezone": {
           "type": "string",
           "minLength": 1,
-          "description": "IANA, es. Europe/Rome. Il file viene aperto offline: il fuso non deve dipendere dal browser di chi legge."
+          "description": "IANA, e.g. Europe/Rome. The file is opened offline: the timezone must not depend on the reader's browser."
         },
         "commit": {
           "type": "object",
@@ -97,7 +97,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["total", "passed", "failed", "flaky", "skipped", "passRate", "durationMs"],
-      "description": "Invariante: total = passed + failed + flaky + skipped. I flaky NON sono contati tra i passati. Verificato da validate.mjs, non esprimibile in JSON Schema.",
+      "description": "Invariant: total = passed + failed + flaky + skipped. Flaky tests are NOT counted among passed. Verified by validate.mjs, not expressible in JSON Schema.",
       "properties": {
         "total": { "type": "integer", "minimum": 0 },
         "passed": { "type": "integer", "minimum": 0 },
@@ -108,7 +108,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 100,
-          "description": "passed / (total - skipped) * 100, gia arrotondato a un decimale. Gli skipped sono esclusi dal denominatore perche altrimenti saltare dei test alza artificialmente la percentuale. Vale 100 quando total - skipped e zero."
+          "description": "passed / (total - skipped) * 100, already rounded to one decimal. Skipped tests are excluded from the denominator, otherwise skipping tests would artificially raise the percentage. Equals 100 when total - skipped is zero."
         },
         "durationMs": { "$ref": "#/$defs/durationMs" }
       }
@@ -122,12 +122,12 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z0-9-]+$",
-          "description": "Corrisponde al tag Playwright senza chiocciola. I test senza tag finiscono in 'altro', normalizzati dall'extractor."
+          "description": "Matches the Playwright tag without the leading @. Untagged tests end up in 'other', normalized by the extractor."
         },
         "label": {
           "type": "string",
           "minLength": 1,
-          "description": "Etichetta in italiano, presa da aree.json. Rinominabile senza toccare il codice dei test."
+          "description": "Display label, taken from areas.json. Renamable without touching test code."
         },
         "total": { "type": "integer", "minimum": 0 },
         "passed": { "type": "integer", "minimum": 0 },
@@ -136,7 +136,7 @@
         "skipped": { "type": "integer", "minimum": 0 },
         "status": {
           "enum": ["ok", "degraded", "broken"],
-          "description": "Precalcolato: broken con almeno un failed, degraded con soli flaky, altrimenti ok."
+          "description": "Precomputed: broken with at least one failed, degraded with only flaky, otherwise ok."
         }
       }
     },
@@ -152,46 +152,46 @@
         "id": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}$",
-          "description": "Hash stabile di file + titlePath, troncato a 8 caratteri. Mai l'id interno di Playwright, che non e stabile tra run. Serve a correlare lo stesso test tra esecuzioni diverse quando reintrodurremo lo storico."
+          "description": "Stable hash of file + titlePath, truncated to 8 characters. Never Playwright's internal id, which isn't stable across runs. Used to correlate the same test across different runs once history is reintroduced."
         },
         "title": {
           "type": "string",
           "minLength": 1,
-          "description": "Il titolo cosi come scritto nel test. Lo script puo abbellire la struttura, non inventare il linguaggio."
+          "description": "The title exactly as written in the test. The script may polish the structure, not invent the wording."
         },
         "file": { "type": "string", "minLength": 1 },
         "area": {
           "type": "string",
           "pattern": "^[a-z0-9-]+$",
-          "description": "Mai null: l'extractor normalizza i test senza tag in 'altro'."
+          "description": "Never null: the extractor normalizes untagged tests to 'other'."
         },
         "status": {
           "enum": ["passed", "failed", "flaky", "skipped"],
-          "description": "Il timedOut di Playwright e normalizzato a failed con error.category = timeout: la distinzione interessa a chi scrive i test, non a chi legge il report."
+          "description": "Playwright's timedOut is normalized to failed with error.category = timeout: the distinction matters to whoever writes the tests, not to whoever reads the report."
         },
         "durationMs": { "$ref": "#/$defs/durationMs" },
         "attempts": {
           "type": "integer",
           "minimum": 1,
-          "description": "1 significa nessun retry."
+          "description": "1 means no retry."
         },
         "skipReason": {
           "type": ["string", "null"],
-          "description": "Valorizzato solo per status skipped."
+          "description": "Set only for status skipped."
         },
         "steps": {
           "type": ["array", "null"],
           "items": { "$ref": "#/$defs/step" },
-          "description": "Popolato solo per failed e flaky, per tenere basso il peso del file. Null anche quando l'errore e avvenuto fuori da qualsiasi step (import fallito, file che non compila)."
+          "description": "Populated only for failed and flaky, to keep the file's weight down. Also null when the error happened outside any step (failed import, file that doesn't compile)."
         },
         "failedStepIndex": {
           "type": ["integer", "null"],
           "minimum": 0,
-          "description": "Indice dentro steps. Null quando steps e null."
+          "description": "Index into steps. Null when steps is null."
         },
         "error": {
           "oneOf": [{ "$ref": "#/$defs/error" }, { "type": "null" }],
-          "description": "Per i test flaky contiene l'errore del tentativo fallito, non dell'ultimo."
+          "description": "For flaky tests, contains the error from the failed attempt, not the last one."
         },
         "attachments": { "$ref": "#/$defs/attachments" }
       }
@@ -206,7 +206,7 @@
         "title": {
           "type": "string",
           "minLength": 1,
-          "description": "Gli hook di Playwright sono rietichettati dall'extractor: 'beforeEach hook' diventa 'Preparazione del test'."
+          "description": "Playwright hooks are relabeled by the extractor: 'beforeEach hook' becomes 'Test setup'."
         },
         "status": { "enum": ["passed", "failed", "skipped"] },
         "durationMs": { "$ref": "#/$defs/durationMs" }
@@ -220,16 +220,16 @@
       "properties": {
         "category": {
           "enum": ["timeout", "elementNotFound", "assertion", "network", "unknown"],
-          "description": "Enum chiuso. Con unknown il renderer mostra direttamente raw, senza frase di accompagnamento."
+          "description": "Closed enum. With unknown, the renderer shows raw directly, with no accompanying sentence."
         },
         "human": {
           "type": ["string", "null"],
-          "description": "Frase in italiano generata dall'extractor. Null quando la categoria e unknown o quando comunque non si sa cosa dire: un 'si e verificato un problema' e peggio del messaggio grezzo, perche non informa e toglie fiducia."
+          "description": "Plain-language sentence generated by the extractor. Null when the category is unknown or when there's nothing useful to say: a generic 'something went wrong' is worse than the raw message, because it doesn't inform and it erodes trust."
         },
         "raw": {
           "type": "string",
           "minLength": 1,
-          "description": "Messaggio Playwright con i codici di escape ANSI gia rimossi. Il JSON di Playwright contiene le sequenze per i colori del terminale: passate tal quali all'HTML diventano \\u001b[31m sparsi nel testo."
+          "description": "Playwright's message with ANSI escape codes already stripped. Playwright's JSON contains the sequences used for terminal colors; passed through as-is into HTML they turn into stray escape codes scattered across the text."
         },
         "location": {
           "type": "object",
@@ -247,7 +247,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["screenshot", "video", "trace"],
-      "description": "Percorsi relativi alla root del repo, mai base64: l'inlining lo fa render.mjs all'ultimo momento, cosi run.json resta leggero, leggibile e diffabile. Per i test flaky sono gli allegati del tentativo fallito, non dell'ultimo: uno screenshot di una schermata che funziona non spiega niente.",
+      "description": "Paths relative to the repo root, never base64: inlining is done by render.mjs at the last moment, so run.json stays lightweight, readable, and diffable. For flaky tests these are the failed attempt's attachments, not the last one's: a screenshot of a working screen explains nothing.",
       "properties": {
         "screenshot": { "type": ["string", "null"], "minLength": 1 },
         "video": { "type": ["string", "null"], "minLength": 1 },

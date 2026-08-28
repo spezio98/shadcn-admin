@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('users', { tag: '@users' }, () => {
-  test("wf.invite_user: L'utente apre la finestra di invito e la chiude senza salvare", async ({
+  test("wf.invite_user: The user opens the invite dialog and closes it without saving", async ({
     page,
   }) => {
     await page.goto('/users')
 
     const dialog = page.getByRole('dialog', { name: 'Invite User' })
 
-    await test.step('Apertura della finestra di invito utente', async () => {
+    await test.step('Opening the invite-user dialog', async () => {
       // users.list / invite_user_button
       await page.getByRole('button', { name: 'Invite User' }).click()
 
@@ -18,7 +18,7 @@ test.describe('users', { tag: '@users' }, () => {
       await expect(dialog.getByRole('combobox', { name: 'Role' })).toBeVisible()
     })
 
-    await test.step('Chiusura della finestra senza salvare', async () => {
+    await test.step('Closing the dialog without saving', async () => {
       // users.invite_dialog / cancel_button
       await dialog.getByRole('button', { name: 'Cancel' }).click()
 
@@ -27,7 +27,7 @@ test.describe('users', { tag: '@users' }, () => {
     })
   })
 
-  test("wf.invite_user: L'utente invita un nuovo utente compilando email e ruolo, la conferma appare in una notifica", async ({
+  test("wf.invite_user: The user invites a new user by filling in email and role, the confirmation appears in a notification", async ({
     page,
   }) => {
     await page.goto('/users')
@@ -35,20 +35,20 @@ test.describe('users', { tag: '@users' }, () => {
     const email = `argus.e2e.${Date.now()}@example.com`
     const dialog = page.getByRole('dialog', { name: 'Invite User' })
 
-    await test.step('Apertura della finestra di invito utente', async () => {
+    await test.step('Opening the invite-user dialog', async () => {
       // users.list / invite_user_button
       await page.getByRole('button', { name: 'Invite User' }).click()
       await expect(dialog).toBeVisible()
     })
 
-    await test.step('Compilazione di email e ruolo', async () => {
+    await test.step('Filling in email and role', async () => {
       // users.invite_dialog / email_input, role_combobox
       await dialog.getByRole('textbox', { name: 'Email' }).fill(email)
       await dialog.getByRole('combobox', { name: 'Role' }).click()
       await page.getByRole('option', { name: 'Manager' }).click()
     })
 
-    await test.step("Invio dell'invito e verifica della notifica di conferma", async () => {
+    await test.step("Sending the invite and checking the confirmation notification", async () => {
       // users.invite_dialog / invite_button
       await dialog.getByRole('button', { name: 'Invite' }).click()
 
@@ -63,14 +63,14 @@ test.describe('users', { tag: '@users' }, () => {
     })
   })
 
-  test("wf.edit_user_dialog: L'utente apre la modifica di un utente, lo vede precompilato e chiude senza salvare", async ({
+  test("wf.edit_user_dialog: The user opens a user's edit dialog, sees it pre-filled, and closes it without saving", async ({
     page,
   }) => {
     await page.goto('/users')
 
     const dialog = page.getByRole('dialog', { name: 'Edit User' })
 
-    await test.step("Apertura della modifica dalla riga della lista", async () => {
+    await test.step("Opening edit from the list row", async () => {
       // users.list / row_menu_button (first row)
       await page.getByRole('button', { name: 'Open menu' }).first().click()
 
@@ -79,7 +79,7 @@ test.describe('users', { tag: '@users' }, () => {
       await expect(dialog).toBeVisible()
     })
 
-    await test.step('Verifica della precompilazione con i dati della riga', async () => {
+    await test.step('Checking that it is pre-filled with the row data', async () => {
       // users.edit_dialog / first_name_input, email_input, role_combobox
       // Not blank/placeholder — genuinely pre-filled.
       await expect(dialog.getByRole('textbox', { name: 'First Name' })).not.toHaveValue('')
@@ -87,7 +87,7 @@ test.describe('users', { tag: '@users' }, () => {
       await expect(dialog.getByRole('combobox', { name: 'Role' })).not.toHaveText('Select a role')
     })
 
-    await test.step('Chiusura della finestra senza salvare', async () => {
+    await test.step('Closing the dialog without saving', async () => {
       // users.edit_dialog / close_button
       await dialog.getByRole('button', { name: 'Close' }).click()
       await expect(dialog).toBeHidden()
