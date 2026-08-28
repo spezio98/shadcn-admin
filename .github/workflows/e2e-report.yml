@@ -22,8 +22,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Caches the downloaded browser binaries only, keyed on the lockfile so a
+      # @playwright/test bump busts it automatically. install-deps (OS-level libs) still
+      # runs every time — it's fast and doesn't need the cache.
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm test:browser:install
+
+      - name: Install browser OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
 
       - name: Type-check e2e tests
         run: pnpm exec tsc -p tests/tsconfig.json --noEmit
