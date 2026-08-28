@@ -6,6 +6,10 @@ on:
 jobs:
   e2e-report:
     runs-on: ubuntu-latest
+    # Browsers + OS deps are pre-baked in this image, matching @playwright/test's pinned
+    # version — skips the "Install browsers" download/install on every run. Keep the tag
+    # in sync with package.json's @playwright/test version when bumping it.
+    container: mcr.microsoft.com/playwright:v1.62.1-noble
 
     steps:
       - name: Checkout code
@@ -21,9 +25,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install browsers
-        run: pnpm test:browser:install
 
       - name: Type-check e2e tests
         run: pnpm exec tsc -p tests/tsconfig.json --noEmit
