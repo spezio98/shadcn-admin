@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Legge run.json e stampa su stdout un riepilogo markdown in linguaggio di
-// business, pensato per $GITHUB_STEP_SUMMARY. Nessun calcolo qui: stats e
-// areas arrivano già pronti da extract.mjs (stesso principio del renderer).
+// Reads run.json and prints a business-language markdown summary to stdout,
+// intended for $GITHUB_STEP_SUMMARY. No computation here: stats and areas
+// already arrive ready-made from extract.mjs (same principle as the renderer).
 import { readFileSync } from "node:fs";
 
 const args = Object.fromEntries(
@@ -18,14 +18,14 @@ const { stats, areas, tests, run: meta } = run;
 const escape = (s) => String(s).replace(/\|/g, "\\|");
 
 const lines = [];
-lines.push(`## Risultati e2e — ${meta.environment.label} (${meta.commit.shortSha})`);
+lines.push(`## E2E results — ${meta.environment.label} (${meta.commit.shortSha})`);
 lines.push("");
 lines.push(
-  `**${stats.passed}/${stats.total - stats.skipped} passati (${stats.passRate}%)** — ` +
-    `${stats.failed} falliti, ${stats.flaky} instabili, ${stats.skipped} saltati`
+  `**${stats.passed}/${stats.total - stats.skipped} passed (${stats.passRate}%)** — ` +
+    `${stats.failed} failed, ${stats.flaky} flaky, ${stats.skipped} skipped`
 );
 lines.push("");
-lines.push("| Area | Esito | Passati | Falliti | Instabili |");
+lines.push("| Area | Outcome | Passed | Failed | Flaky |");
 lines.push("|---|---|---|---|---|");
 for (const area of areas) {
   const icon = area.status === "ok" ? "✅" : area.status === "flaky" ? "⚠️" : "❌";
@@ -35,15 +35,15 @@ for (const area of areas) {
 const failedTests = tests.filter((t) => t.status === "failed" || t.status === "flaky");
 if (failedTests.length > 0) {
   lines.push("");
-  lines.push("### Da verificare");
+  lines.push("### To review");
   for (const t of failedTests) {
     const areaLabel = areas.find((a) => a.id === t.area)?.label ?? t.area;
-    const step = t.failedStepIndex != null ? ` — fallito al passo: ${t.steps[t.failedStepIndex].title}` : "";
+    const step = t.failedStepIndex != null ? ` — failed at step: ${t.steps[t.failedStepIndex].title}` : "";
     lines.push(`- **${escape(areaLabel)}** — ${escape(t.title)}${step}`);
   }
 }
 
 lines.push("");
-lines.push("Report completo (screenshot, video, dettagli) nell'artifact `report-business.html` di questo run.");
+lines.push("Full report (screenshots, videos, details) in the `report-business.html` artifact of this run.");
 
 process.stdout.write(lines.join("\n") + "\n");

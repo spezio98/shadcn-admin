@@ -19,7 +19,7 @@
     "test:coverage": "vitest run --coverage --browser.headless",
     "test:browser:install": "playwright install chromium --with-deps",
     "test:e2e": "tsc -p tests/tsconfig.json --noEmit && node node_modules/@playwright/test/cli.js test",
-    "report:build": "node scripts/e2e-report/extract.mjs --results results.json --steps steps.json --aree scripts/e2e-report/aree.json --out run.json && node scripts/e2e-report/validate.mjs run.json && node scripts/e2e-report/render.mjs --run run.json --out report-business.html",
+    "report:build": "node scripts/e2e-report/extract.mjs --results results.json --steps steps.json --areas scripts/e2e-report/areas.json --out run.json && node scripts/e2e-report/validate.mjs run.json && node scripts/e2e-report/render.mjs --run run.json --out report-business.html",
     "report:dev": "node scripts/e2e-report/render.mjs --run scripts/e2e-report/fixtures/run-misto.json --out /tmp/anteprima.html"
   },
   "dependencies": {

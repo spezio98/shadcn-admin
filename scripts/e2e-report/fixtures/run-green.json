@@ -10,7 +10,7 @@
       "label": "Staging",
       "isProduction": false
     },
-    "suiteLabel": "Tutti i test",
+    "suiteLabel": "All tests",
     "triggeredBy": "m.bianchi",
     "startedAt": "2026-08-24T06:00:00.000Z",
     "finishedAt": "2026-08-24T06:03:41.000Z",
@@ -20,7 +20,7 @@
       "sha": "9f1c4b7e2a8d5306fbc1e94a77d20e5583aa1c46",
       "shortSha": "9f1c4b7",
       "branch": "main",
-      "message": "Aggiorna testi della pagina di conferma ordine"
+      "message": "Update order confirmation page copy"
     }
   },
   "stats": {
@@ -44,8 +44,8 @@
       "status": "ok"
     },
     {
-      "id": "fatturazione",
-      "label": "Fatturazione",
+      "id": "billing",
+      "label": "Billing",
       "total": 2,
       "passed": 2,
       "failed": 0,
@@ -67,8 +67,8 @@
   "tests": [
     {
       "id": "1a2b3c4d",
-      "title": "Il cliente completa un acquisto con carta di credito",
-      "file": "tests/checkout/acquisto.spec.ts",
+      "title": "The customer completes a purchase with a credit card",
+      "file": "tests/checkout/purchase.spec.ts",
       "area": "checkout",
       "status": "passed",
       "durationMs": 42100,
@@ -85,8 +85,8 @@
     },
     {
       "id": "2b3c4d5e",
-      "title": "Il cliente puo svuotare il carrello prima di pagare",
-      "file": "tests/checkout/carrello.spec.ts",
+      "title": "The customer can empty the cart before paying",
+      "file": "tests/checkout/cart.spec.ts",
       "area": "checkout",
       "status": "passed",
       "durationMs": 18400,
@@ -103,9 +103,9 @@
     },
     {
       "id": "4d5e6f70",
-      "title": "L'amministratore puo scaricare il registro delle fatture del mese",
-      "file": "tests/fatturazione/registro.spec.ts",
-      "area": "fatturazione",
+      "title": "The administrator can download the monthly invoice register",
+      "file": "tests/billing/register.spec.ts",
+      "area": "billing",
       "status": "passed",
       "durationMs": 29800,
       "attempts": 1,
@@ -121,9 +121,9 @@
     },
     {
       "id": "3c4d5e6f",
-      "title": "La fattura viene generata in PDF dopo il pagamento",
-      "file": "tests/fatturazione/emissione.spec.ts",
-      "area": "fatturazione",
+      "title": "The invoice is generated as a PDF after payment",
+      "file": "tests/billing/issuance.spec.ts",
+      "area": "billing",
       "status": "passed",
       "durationMs": 51900,
       "attempts": 1,
@@ -139,8 +139,8 @@
     },
     {
       "id": "6f708192",
-      "title": "Il cliente invita un collega nel proprio spazio di lavoro",
-      "file": "tests/onboarding/invito.spec.ts",
+      "title": "The customer invites a colleague to their workspace",
+      "file": "tests/onboarding/invite.spec.ts",
       "area": "onboarding",
       "status": "passed",
       "durationMs": 31500,
@@ -157,8 +157,8 @@
     },
     {
       "id": "5e6f7081",
-      "title": "Il nuovo cliente completa la registrazione con email aziendale",
-      "file": "tests/onboarding/registrazione.spec.ts",
+      "title": "The new customer completes registration with a work email",
+      "file": "tests/onboarding/registration.spec.ts",
       "area": "onboarding",
       "status": "passed",
       "durationMs": 47300,
