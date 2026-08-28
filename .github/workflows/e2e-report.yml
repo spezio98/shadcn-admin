@@ -6,10 +6,6 @@ on:
 jobs:
   e2e-report:
     runs-on: ubuntu-latest
-    # Browsers + OS deps are pre-baked in this image, matching @playwright/test's pinned
-    # version — skips the "Install browsers" download/install on every run. Keep the tag
-    # in sync with package.json's @playwright/test version when bumping it.
-    container: mcr.microsoft.com/playwright:v1.62.1-noble
 
     steps:
       - name: Checkout code
@@ -25,6 +21,24 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Caches the downloaded browser binaries only, keyed on the lockfile so a
+      # @playwright/test bump busts it automatically. install-deps (OS-level libs) still
+      # runs every time — it's fast and doesn't need the cache.
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm test:browser:install
+
+      - name: Install browser OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
 
       - name: Type-check e2e tests
         run: pnpm exec tsc -p tests/tsconfig.json --noEmit
