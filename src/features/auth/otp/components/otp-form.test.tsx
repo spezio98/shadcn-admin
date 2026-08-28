@@ -43,13 +43,22 @@ describe('OtpForm', () => {
   it('submits the OTP and navigates after timeout', async () => {
     vi.useFakeTimers()
 
-    await userEvent.fill(otpInput, '123456')
+    await userEvent.fill(otpInput, '000000')
     await userEvent.click(verifyButton)
 
     expect(showSubmittedData).toHaveBeenCalledOnce()
-    expect(showSubmittedData).toHaveBeenCalledWith({ otp: '123456' })
+    expect(showSubmittedData).toHaveBeenCalledWith({ otp: '000000' })
 
     await vi.advanceTimersByTimeAsync(1000)
     expect(navigate).toHaveBeenCalledWith({ to: '/' })
+  })
+
+  it('rejects an incorrect code', async () => {
+    await userEvent.fill(otpInput, '123456')
+    await userEvent.click(verifyButton)
+
+    await expect.element(screen.getByText('Incorrect code.')).toBeVisible()
+    expect(showSubmittedData).not.toHaveBeenCalled()
+    expect(navigate).not.toHaveBeenCalled()
   })
 })

@@ -95,15 +95,15 @@ test.describe('auth', { tag: '@auth' }, () => {
 
     await test.step('Entering the 6-digit code and verifying', async () => {
       // auth.otp / otp_input, verify_button — starts disabled, enables only once all 6
-      // digits are entered; no real backend, any 6-digit code is accepted.
+      // digits are entered; no real backend, only "000000" is accepted.
       const verifyButton = page.getByRole('button', { name: 'Verify' })
       await expect(verifyButton).toBeDisabled()
 
-      await page.getByRole('textbox', { name: 'One-Time Password' }).fill('123456')
+      await page.getByRole('textbox', { name: 'One-Time Password' }).fill('000000')
       await expect(verifyButton).toBeEnabled()
       await verifyButton.click()
 
-      await expect(page.getByText('{ "otp": "123456" }')).toBeVisible()
+      await expect(page.getByText('{ "otp": "000000" }')).toBeVisible()
     })
   })
 
@@ -126,8 +126,9 @@ test.describe('auth', { tag: '@auth' }, () => {
     await test.step('Entering the OTP code and (deliberately wrong) verification', async () => {
       await page.getByRole('textbox', { name: 'One-Time Password' }).fill('123456')
       await page.getByRole('button', { name: 'Verify' }).click()
-      // Wrong on purpose: the code submitted was "123456", not "000000".
-      await expect(page.getByText('{ "otp": "000000" }')).toBeVisible()
+      // Wrong on purpose: only "000000" is accepted, so submitting "123456" is rejected
+      // with a validation error and never shows the success toast asserted here.
+      await expect(page.getByText('{ "otp": "123456" }')).toBeVisible()
     })
   })
 })
