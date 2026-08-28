@@ -73,3 +73,19 @@ jobs:
           name: report-business
           path: report-business.html
           retention-days: 14
+
+      # Evaluation report — parallel to, not replacing, the two above. allure-playwright
+      # writes raw results to allure-results/ as tests run; this turns them into the
+      # browsable HTML site.
+      - name: Generate Allure report
+        if: always()
+        continue-on-error: true
+        run: npx allure generate ./allure-results -o ./allure-report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 14

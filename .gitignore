@@ -40,6 +40,8 @@ dist-ssr
 # Playwright test runner artifacts (tests/)
 /playwright-report/
 /test-results/
+/allure-results/
+/allure-report/
 
 # Business report pipeline (playwright-report-business skill)
 /results.json
