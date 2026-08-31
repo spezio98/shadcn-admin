@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('auth', { tag: '@auth' }, () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/sign-in')
+  })
+
   test("wf.auth_navigation_loop: The user navigates between sign in, password recovery, and sign up, and returns to sign in", async ({
     page,
   }) => {
-    await page.goto('/sign-in')
-
     await test.step('Opening the password recovery page from login', async () => {
       // auth.sign_in / forgot_password_link
       await page.getByRole('link', { name: 'Forgot password?' }).click()
@@ -37,8 +39,6 @@ test.describe('auth', { tag: '@auth' }, () => {
   test("wf.sign_in_success: The user signs in with valid credentials and lands on the dashboard", async ({
     page,
   }) => {
-    await page.goto('/sign-in')
-
     await test.step('Filling in a valid email and password', async () => {
       // auth.sign_in / email_input, password_input
       await page.getByRole('textbox', { name: 'Email' }).fill('test@example.com')
@@ -58,8 +58,6 @@ test.describe('auth', { tag: '@auth' }, () => {
   test("wf.sign_in_empty_submit: The user submits the empty sign-in form and sees validation errors", async ({
     page,
   }) => {
-    await page.goto('/sign-in')
-
     await test.step('Submitting the form without filling in the fields', async () => {
       // auth.sign_in / sign_in_button
       await page.getByRole('button', { name: 'Sign in' }).click()
@@ -76,8 +74,6 @@ test.describe('auth', { tag: '@auth' }, () => {
   test('wf.forgot_password_to_otp: The user recovers their password with a valid email and receives the OTP code', async ({
     page,
   }) => {
-    await page.goto('/sign-in')
-
     await test.step('Opening the password recovery page', async () => {
       // auth.sign_in / forgot_password_link
       await page.getByRole('link', { name: 'Forgot password?' }).click()
@@ -114,8 +110,6 @@ test.describe('auth', { tag: '@auth' }, () => {
   test('wf.forgot_password_to_otp: password recovery with a valid email, (deliberately wrong) verification of the code in the notification', async ({
     page,
   }) => {
-    await page.goto('/sign-in')
-
     await test.step('Opening Forgot password and submitting a valid email', async () => {
       await page.getByRole('link', { name: 'Forgot password?' }).click()
       await page.getByRole('textbox', { name: 'Email' }).fill('test@example.com')
