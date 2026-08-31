@@ -9,6 +9,7 @@ export default defineConfig({
     ['json', { outputFile: 'results.json' }],
     ['./scripts/e2e-report/steps-reporter.mjs', { outputFile: 'steps.json' }],
     ['html', { open: 'never' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:5173',
