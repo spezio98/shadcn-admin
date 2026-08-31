@@ -3,16 +3,22 @@ name: E2E business report
 on:
   workflow_dispatch: {}
 
+# Prevent two manually-triggered runs from racing on the same shared dev-server port.
+concurrency:
+  group: e2e-report-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   e2e-report:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
@@ -27,7 +33,7 @@ jobs:
       # runs every time — it's fast and doesn't need the cache.
       - name: Cache Playwright browsers
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -60,7 +66,7 @@ jobs:
 
       - name: Upload developer report (with traces)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: playwright-report
           path: playwright-report/
@@ -68,7 +74,7 @@ jobs:
 
       - name: Upload business report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: report-business
           path: report-business.html
@@ -84,7 +90,7 @@ jobs:
 
       - name: Upload Allure report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: allure-report
           path: allure-report/
