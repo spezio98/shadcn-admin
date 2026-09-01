@@ -1,0 +1,13 @@
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+
+if echo "$staged" | grep -qE '^(tests/|docs/argus/)'; then
+  # Argus's app-model validator is internal tooling, not vendored into this repo —
+  # point ARGUS_VALIDATOR_PATH at your local checkout's validate-app-model.mts to
+  # enable this check. Missing/unset just skips it (with a warning), so the hook
+  # never blocks contributors who don't have Argus installed.
+  if [ -n "$ARGUS_VALIDATOR_PATH" ] && [ -f "$ARGUS_VALIDATOR_PATH" ]; then
+    node "$ARGUS_VALIDATOR_PATH" --repo-root . || exit 1
+  else
+    echo "warning: ARGUS_VALIDATOR_PATH not set/found — skipping Argus app-model validation" >&2
+  fi
+fi
