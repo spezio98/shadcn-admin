@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('shell', { tag: '@shell' }, () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
   test("wf.command_palette_navigate: The user searches for \"task\" in quick search and navigates to the tasks list", async ({
     page,
   }) => {
-    await page.goto('/')
-
     const query = page.getByRole('combobox')
 
     await test.step('Opening quick search from the header', async () => {
@@ -29,8 +31,6 @@ test.describe('shell', { tag: '@shell' }, () => {
   test("wf.customize_theme: The user opens theme settings, checks the available options, and closes it", async ({
     page,
   }) => {
-    await page.goto('/')
-
     const dialog = page.getByRole('dialog', { name: 'Theme Settings' })
 
     await test.step('Opening the Theme Settings dialog', async () => {

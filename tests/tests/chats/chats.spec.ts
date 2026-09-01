@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('chats', { tag: '@chats' }, () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/chats')
+  })
+
   test("wf.start_chat: The user opens a conversation from the inbox and sees the reply box", async ({
     page,
   }) => {
-    await page.goto('/chats')
-
     await test.step('Opening a conversation from the inbox', async () => {
       // chats.inbox_empty / conversation_item (first conversation in the list)
       await page.getByRole('button', { name: /Alex John/ }).click()
@@ -18,8 +20,6 @@ test.describe('chats', { tag: '@chats' }, () => {
   test("wf.start_chat: flaky demo — the reply box isn't seen in time on the first attempt", async ({
     page,
   }, testInfo) => {
-    await page.goto('/chats')
-
     await test.step('Opening a conversation from the inbox', async () => {
       // chats.inbox_empty / conversation_item (first conversation in the list)
       await page.getByRole('button', { name: /Alex John/ }).click()

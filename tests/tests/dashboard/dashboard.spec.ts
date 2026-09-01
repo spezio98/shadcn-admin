@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('dashboard', { tag: '@dashboard' }, () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
   test("wf.dashboard_analytics: The user switches from Overview to the Analytics tab and sees the traffic chart", async ({
     page,
   }) => {
-    await page.goto('/')
-
     await test.step('Checking that the Overview tab is available', async () => {
       // dashboard.overview / tab_overview
       await expect(page.getByRole('tab', { name: 'Overview' })).toBeVisible()
@@ -23,8 +25,6 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
   test("wf.dashboard_analytics: flaky demo — the traffic chart isn't seen in time on the first attempt", async ({
     page,
   }, testInfo) => {
-    await page.goto('/')
-
     await test.step('Opening the Analytics tab', async () => {
       // dashboard.overview / tab_analytics
       await page.getByRole('tab', { name: 'Analytics' }).click()
@@ -46,8 +46,6 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
   test('The Reports and Notifications tabs are disabled (known issue)', async ({
     page,
   }) => {
-    await page.goto('/')
-
     await test.step('Checking that the Reports and Notifications tabs are disabled', async () => {
       await expect(page.getByRole('tab', { name: 'Reports' })).toBeDisabled()
       await expect(page.getByRole('tab', { name: 'Notifications' })).toBeDisabled()
@@ -57,7 +55,6 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
   // INTENTIONALLY FAILING — report-reading exercise, kept in the suite on purpose.
   // Real heading is "Dashboard"; this typo produces a clean expected/actual text diff.
   test('report-demo: assertion mismatch on the dashboard heading text', async ({ page }) => {
-    await page.goto('/')
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toHaveText('Dashboarrrd')
   })
 
@@ -65,7 +62,6 @@ test.describe('dashboard', { tag: '@dashboard' }, () => {
   // tab_reports is disabled in this build; clicking without { force: true } times out with
   // "element is not enabled", a different failure shape than a missing locator.
   test('report-demo: actionability timeout clicking a disabled tab', async ({ page }) => {
-    await page.goto('/')
     // Short explicit timeout: the default 30s actionability wait proves nothing extra here
     // and only bloats the recorded video for no benefit.
     await page.getByRole('tab', { name: 'Reports' }).click({ timeout: 3000 })

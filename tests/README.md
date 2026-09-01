@@ -1,6 +1,6 @@
 # shadcn-admin — Playwright e2e suite
 
-Covers all 14 workflows registered in `docs/argus/manifest.yaml` (the Argus app flow model).
+Covers all 15 workflows registered in `docs/argus/manifest.yaml` (the Argus app flow model).
 
 ## Run
 
@@ -35,7 +35,7 @@ feature/workflow index.
 |---|---|
 | `tests/dashboard/dashboard.spec.ts` | `wf.dashboard_analytics` |
 | `tests/shell/shell.spec.ts` | `wf.command_palette_navigate`, `wf.customize_theme` |
-| `tests/tasks/tasks.spec.ts` | `wf.create_task_dialog` (cancel + full submit), `wf.task_row_actions`, `wf.edit_task_dialog` |
+| `tests/tasks/tasks.spec.ts` | `wf.create_task_dialog` (cancel + full submit), `wf.task_row_actions`, `wf.edit_task_dialog`, `wf.create_task_via_search` |
 | `tests/users/users.spec.ts` | `wf.invite_user` (cancel + full submit), `wf.edit_user_dialog` |
 | `tests/chats/chats.spec.ts` | `wf.start_chat` |
 | `tests/auth/auth.spec.ts` | `wf.auth_navigation_loop`, `wf.sign_in_success`, `wf.sign_in_empty_submit`, `wf.forgot_password_to_otp` |
@@ -70,6 +70,11 @@ feature/workflow index.
 - **Tasks/Users tables use randomized mock data** (row content, page counts) generated once when
   the app boots; specs only assert structure (dialog opens, menu items present), never on
   specific row content, so they stay valid across restarts.
-- 14 of 14 workflows in `docs/argus/manifest.yaml` are covered. Everything else in `gaps.yaml`
-  (column-visibility popovers, button effects with no visible result, RTL layout, etc.) is
-  intentionally untested — none of it is part of a modeled workflow.
+- 15 of 15 workflows in `docs/argus/manifest.yaml` are covered. `wf.create_task_via_search` has a
+  genuine passing test plus a deliberately-wrong report-demo variant (see below). Everything else
+  in `gaps.yaml` (column-visibility popovers, button effects with no visible result, RTL layout,
+  etc.) is intentionally untested — none of it is part of a modeled workflow.
+- **`report-demo` tests are intentionally failing**, kept in the suite on purpose to exercise
+  report-reading (a locator that never resolves, a wrong URL assertion, a wrong heading text, an
+  actionability timeout on a disabled control, and a wrong final assertion on an otherwise-genuine
+  multi-step flow). Do not "fix" their assertions — see the comment on each.

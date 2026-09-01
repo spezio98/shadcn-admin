@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('users', { tag: '@users' }, () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/users')
+  })
+
   test("wf.invite_user: The user opens the invite dialog and closes it without saving", async ({
     page,
   }) => {
-    await page.goto('/users')
-
     const dialog = page.getByRole('dialog', { name: 'Invite User' })
 
     await test.step('Opening the invite-user dialog', async () => {
@@ -30,8 +32,6 @@ test.describe('users', { tag: '@users' }, () => {
   test("wf.invite_user: The user invites a new user by filling in email and role, the confirmation appears in a notification", async ({
     page,
   }) => {
-    await page.goto('/users')
-
     const email = `argus.e2e.${Date.now()}@example.com`
     const dialog = page.getByRole('dialog', { name: 'Invite User' })
 
@@ -66,8 +66,6 @@ test.describe('users', { tag: '@users' }, () => {
   test("wf.edit_user_dialog: The user opens a user's edit dialog, sees it pre-filled, and closes it without saving", async ({
     page,
   }) => {
-    await page.goto('/users')
-
     const dialog = page.getByRole('dialog', { name: 'Edit User' })
 
     await test.step("Opening edit from the list row", async () => {
