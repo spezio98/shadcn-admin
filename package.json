@@ -20,7 +20,8 @@
     "test:browser:install": "playwright install chromium --with-deps",
     "test:e2e": "tsc -p tests/tsconfig.json --noEmit && node node_modules/@playwright/test/cli.js test",
     "report:build": "node scripts/e2e-report/extract.mjs --results results.json --steps steps.json --areas scripts/e2e-report/areas.json --out run.json && node scripts/e2e-report/validate.mjs run.json && node scripts/e2e-report/render.mjs --run run.json --out report-business.html",
-    "report:dev": "node scripts/e2e-report/render.mjs --run scripts/e2e-report/fixtures/run-misto.json --out /tmp/anteprima.html"
+    "report:dev": "node scripts/e2e-report/render.mjs --run scripts/e2e-report/fixtures/run-misto.json --out /tmp/anteprima.html",
+    "prepare": "husky"
   },
   "dependencies": {
     "@clerk/react": "^6.4.3",
@@ -91,6 +92,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "husky": "^9.1.7",
     "knip": "^6.4.1",
     "playwright": "^1.62.1",
     "prettier": "^3.8.3",
